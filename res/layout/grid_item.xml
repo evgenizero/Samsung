@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <bg.tarasoft.smartsales.views.ResizableImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/product_item_height"
+        android:layout_weight="3"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/no_photo" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/margin_small"
+        android:layout_weight="1"
+        android:background="@drawable/sub_category_bar"
+        android:gravity="center"
+        android:text="SHalalalalal"
+        android:textColor="@color/text_color"
+        android:textStyle="bold"
+        android:textSize="@dimen/grid_item_text_size" />
+
+</LinearLayout>

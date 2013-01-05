@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="category_image_width">290dp</dimen>
+    <dimen name="category_image_height">230dp</dimen>
+
+    <integer name="columns">4</integer>
+    <integer name="sub_cat_columns">3</integer>
+
+    <item name="category_text_weight" format="float" type="dimen">1.5</item>
+    <item name="header_pholder_weight" format="float" type="dimen">0.1</item>
+
+</resources>

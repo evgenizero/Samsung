@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="10dp" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true" >
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/category_text_height"
+            android:layout_weight="@dimen/category_text_weight"
+            android:background="@drawable/left_category_bar"
+            android:gravity="center_vertical|right"
+            android:scaleType="fitXY"
+            android:text="12345678909999999"
+            android:layout_marginLeft="@dimen/margin_big"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/grid_item_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/category_image_width"
+        android:layout_height="@dimen/category_image_height"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_medium" >
+
+        <bg.tarasoft.smartsales.views.ResizableImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/no_photo" />
+    </LinearLayout>
+
+</RelativeLayout>
