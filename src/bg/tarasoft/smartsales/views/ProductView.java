@@ -5,7 +5,6 @@ import java.util.Currency;
 import java.util.List;
 
 import bg.tarasoft.smartsales.ProductsActivity;
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.bean.Product;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.cache.Cache;
@@ -14,6 +13,7 @@ import bg.tarasoft.smartsales.requests.GetCategoriesRequest;
 import bg.tarasoft.smartsales.requests.GetChecksumRequest;
 import bg.tarasoft.smartsales.requests.GetProductHTML;
 import bg.tarasoft.smartsales.requests.SamsungRequests;
+import bg.tarasoft.smartsales.samsung.R;
 
 import android.app.Activity;
 import android.app.Dialog;

@@ -18,7 +18,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 
 import bg.tarasoft.smartsales.HTMLPlayerActivity;
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.bean.Product;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.parser.ParseXml;

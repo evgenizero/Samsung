@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.adapters.ProductAdapterNew;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.LoggedActivity;
@@ -17,12 +16,14 @@ import bg.tarasoft.smartsales.database.ProductDataSource;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
 import bg.tarasoft.smartsales.requests.GetChecksumRequest;
 import bg.tarasoft.smartsales.requests.SamsungRequests;
+import bg.tarasoft.smartsales.samsung.R;
 import bg.tarasoft.smartsales.utilities.Utilities;
 import bg.tarasoft.smartsales.views.HeaderBar;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -66,13 +67,21 @@ public class ProductsActivity extends Activity {
 		mContext = this;
 		headerBar = (HeaderBar) findViewById(R.id.header_bar);
 		updateText = (TextView) findViewById(R.id.update_all_text);
+		
+		SharedPreferences preferences = getSharedPreferences("settings", 0);
+		if(preferences.getInt("updateAll", 0) == 0) {
+			updateText.setVisibility(View.GONE);
+		}
+		
 		updateText.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				ArrayList<ProductsGroup> categoriesForBar = ((ProductsActivity) mContext).getHeaderBar();
-				Toast.makeText(mContext, "Updating all", Toast.LENGTH_SHORT).show();
-				new GetChecksumRequest(mContext, products, categoriesForBar);
-				SamsungRequests.getExecutor().execute();
+				if(products.size() != 0) {
+					ArrayList<ProductsGroup> categoriesForBar = ((ProductsActivity) mContext).getHeaderBar();
+					Toast.makeText(mContext, "Updating all", Toast.LENGTH_SHORT).show();
+					new GetChecksumRequest(mContext, products, categoriesForBar);
+					SamsungRequests.getExecutor().execute();
+				}
 	
 			}
 		});

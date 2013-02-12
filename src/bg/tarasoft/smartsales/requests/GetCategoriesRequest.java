@@ -1,5 +1,6 @@
 package bg.tarasoft.smartsales.requests;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class GetCategoriesRequest extends SamsungGetRequest {
 	private List<Category> categories;
 	private CategoryDataSource dataSource;
 
+	public GetCategoriesRequest(Context context, InputStream in) {
+		this(context);
+		this.in = in;
+	}
+	
 	public GetCategoriesRequest(Context context) {
 		super(
 				context,
@@ -33,13 +39,15 @@ public class GetCategoriesRequest extends SamsungGetRequest {
 		dataSource = new CategoryDataSource(context);
 		dataSource.open();
 
-		if (!Utilities.isOnline(context)) {
-			executor.clear();
-			((MainCategories) context).processData();
-			dataSource.close();
-		} else {
+		//TODO EHRHEHRHEHREHREKJEHRKLSEJHR:SKDJFH:SDGHJ:SDLKGHJ:SDLGHJS:DJKGHSD:KHJ
+		
+//		if (!Utilities.isOnline(context)) {
+//			executor.clear();
+//			((MainCategories) context).processData();
+//			dataSource.close();
+//		} else {
 			categories = new ArrayList<Category>();
-		}
+		//}
 	}
 
 	@Override

@@ -11,8 +11,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.cache.Cache;
+import bg.tarasoft.smartsales.samsung.R;
 
 public class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
 

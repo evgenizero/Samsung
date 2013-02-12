@@ -1,5 +1,6 @@
 package bg.tarasoft.smartsales.requests;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class GetProductsRequest extends SamsungGetRequest {
 	private List<Product> products;
 	private ProductDataSource dataSource;
 
+	public GetProductsRequest(Context context, InputStream in) {
+		this(context);
+		this.in = in;
+	}
+	
 	public GetProductsRequest(Context context) {
 		super(context, "Updating indexes/Getting products",
 				"http://system.smartsales.bg/product/android_request_info/?request_type=xml_products&answer_type=download");
@@ -34,12 +40,12 @@ public class GetProductsRequest extends SamsungGetRequest {
 		dataSource = new ProductDataSource(context);
 		dataSource.open();
 
-		if (!Utilities.isOnline(context)) {
-			executor.clear();
-			dataSource.close();
-		} else {
+//		if (!Utilities.isOnline(context)) {
+//			executor.clear();
+//			dataSource.close();
+//		} else {
 			products = new ArrayList<Product>();
-		}
+		//}
 	}
 	
 	@Override

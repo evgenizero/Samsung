@@ -16,6 +16,7 @@ import android.util.Log;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.Product;
 import bg.tarasoft.smartsales.bean.Serie;
+import bg.tarasoft.smartsales.bean.Store;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
 import bg.tarasoft.smartsales.database.SeriesProductsDataSource;
 
@@ -24,12 +25,14 @@ public class ParseXml {
 	private static final String PRODUCT = "product";
 	private static final String CHECKSUM = "checksum";
 	private static final String CATEGORY_ID = "category_id";
-	private static String CATEGORY = "category";
-	private static String ID = "id";
-	private static String PARENT_ID = "parent_id";
-	private static String NAME = "name";
-	private static String PIC = "pic";
-	private static String SORTORDER = "sortorder";
+	private static final String CATEGORY = "category";
+	private static final String ID = "id";
+	private static final String PARENT_ID = "parent_id";
+	private static final String NAME = "name";
+	private static final String PIC = "pic";
+	private static final String SORTORDER = "sortorder";
+	private static final String STORE = "store";
+	private static final String STORE_NUMBER = "store_number";
 
 	private static String ITEM = "item";
 
@@ -245,5 +248,34 @@ public class ParseXml {
 			value = "";
 		}
 		return value;
+	}
+
+	public static void parseStores(Document doc, List<Store> stores,
+			Context context) {
+		
+		try {
+		
+		NodeList listOfStores = doc.getElementsByTagName(STORE);
+		
+		Store store = null;
+
+		for (int s = 0; s < listOfStores.getLength(); s++) {
+			Node firstPersonNode = listOfStores.item(s);
+			if (firstPersonNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element firstPersonElement = (Element) firstPersonNode;
+				store = new Store();
+				store.setStoreID(Integer.valueOf(getElementByName(
+						firstPersonElement, ID)));
+				store.setStoreName(String.valueOf(getElementByName(
+						firstPersonElement, NAME)));
+				//store.setHallId(Integer.valueOf(getElementByName(firstPersonElement, STORE_NUMBER)));	
+								
+				stores.add(store);
+			}
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+		
 	}
 }

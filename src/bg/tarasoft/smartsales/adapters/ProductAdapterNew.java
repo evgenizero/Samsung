@@ -2,9 +2,8 @@ package bg.tarasoft.smartsales.adapters;
 
 import java.util.List;
 
-import bg.tarasoft.smartsales.R;
-import bg.tarasoft.smartsales.R.id;
 import bg.tarasoft.smartsales.bean.Product;
+import bg.tarasoft.smartsales.samsung.R;
 import bg.tarasoft.smartsales.views.ProductView;
 import android.app.Activity;
 import android.content.Context;

@@ -19,7 +19,13 @@ import android.widget.Toast;
 public abstract class SamsungGetRequest extends SamsungRequests {
 
 	protected static ProgressDialog dialog, progress;
+	protected InputStream in;
 
+	protected SamsungGetRequest(Context context, String showMessage, InputStream in) {
+		super(context, showMessage);
+		this.in = in;
+	}
+	
 	protected SamsungGetRequest(Context context, String showMessage, String baseUrl) {
 		super(context, showMessage, baseUrl);
 	}
@@ -41,23 +47,6 @@ public abstract class SamsungGetRequest extends SamsungRequests {
 	protected void onPreExecute() {
 		super.onPreExecute();
 
-//		if (showMessage != null) {
-//			if (dialog != null && !dialog.getContext().equals(context)) {
-//				dialog.cancel();
-//				dialog = null;
-//			}
-//			if (dialog == null)
-//				dialog = new ProgressDialog(context);
-//			dialog.setTitle(showMessage + "...");
-//			dialog.setCancelable(true);
-//			dialog.show();
-//			dialog.setOnCancelListener(new OnCancelListener() {
-//				public void onCancel(DialogInterface dialog) {
-//					cancel(true);
-//				}
-//			});
-//		}
-		
 		if(showMessage != null) {
 			progress = new ProgressDialog(context);
 			progress.setMessage(showMessage);
@@ -70,12 +59,16 @@ public abstract class SamsungGetRequest extends SamsungRequests {
 	@Override
 	protected Void doInBackground(Void... params) {
 		try {
-			openConnection();
-			http.setRequestProperty("Accept", "application/xml");
-			if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				readXmlStream(http.getInputStream());
+			if(in == null) {
+				openConnection();
+				http.setRequestProperty("Accept", "application/xml");
+				if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
+					readXmlStream(http.getInputStream());
+				} else {
+					return null;
+				}
 			} else {
-				return null;
+				readXmlStream(in);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

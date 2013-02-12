@@ -13,7 +13,6 @@ import org.xml.sax.SAXParseException;
 
 import bg.tarasoft.smartsales.HTMLPlayerActivity;
 import bg.tarasoft.smartsales.MainCategories;
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.Checksum;
 import bg.tarasoft.smartsales.bean.Product;
@@ -198,6 +197,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 					.execute("http://system.smartsales.bg/product/android_request_info/?request_type=common_files&answer_type=download");
 
 		} else if (type.equals("xml_categories")) {
+			new GetStoresRequest(context);
 			new GetCategoriesRequest(context);
 			new GetProductsRequest(context);
 			new GetSeriesRequest(context);

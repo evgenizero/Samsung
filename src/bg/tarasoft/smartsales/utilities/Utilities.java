@@ -9,6 +9,7 @@ import java.util.UUID;
 import bg.tarasoft.smartsales.HTMLPlayerActivity;
 import bg.tarasoft.smartsales.SubCategoriesActivity;
 import bg.tarasoft.smartsales.bean.Category;
+import bg.tarasoft.smartsales.bean.Coordinate;
 import bg.tarasoft.smartsales.bean.LoggedActivity;
 import bg.tarasoft.smartsales.bean.Product;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
@@ -17,6 +18,9 @@ import bg.tarasoft.smartsales.database.LogsDataSource;
 import bg.tarasoft.smartsales.views.HeaderBar;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -27,6 +31,28 @@ import android.widget.Toast;
 
 public class Utilities {
 
+	public static Coordinate getCoodinates(Context context) {
+		LocationManager locationManager =
+		        (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		String mlocProvider;
+		Criteria hdCrit = new Criteria();
+
+		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
+
+		mlocProvider = locationManager.getBestProvider(hdCrit, true);
+
+		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
+
+		double currentLatitude = currentLocation.getLatitude();
+		double currentLongitude = currentLocation.getLongitude();
+		
+		Coordinate coordinates = new Coordinate();
+		coordinates.setLatitude(currentLatitude);
+		coordinates.setLongitude(currentLongitude);
+		
+		return coordinates;
+	}
+	
 	public static boolean isOnline(Context context) {
 		ConnectivityManager cm = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);

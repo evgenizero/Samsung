@@ -3,6 +3,7 @@ package bg.tarasoft.smartsales.requests;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import bg.tarasoft.smartsales.database.CategoryDataSource;
 import bg.tarasoft.smartsales.utilities.Utilities;
 
 import android.content.Context;
@@ -24,6 +25,9 @@ public abstract class SamsungRequests extends AsyncTask<Void, Void, Void> {
 	protected HttpURLConnection http;
 	
 	protected static RequestExecutor executor;
+	
+	private CategoryDataSource dataSource;
+	private static boolean isInitialData = false;
 
 	public static RequestExecutor getExecutor() {
 		return executor;
@@ -32,6 +36,16 @@ public abstract class SamsungRequests extends AsyncTask<Void, Void, Void> {
 	protected SamsungRequests(Context context, String showMessage, String baseUrl) {
 		this(context, showMessage);
 		this.baseUrl = baseUrl;
+		
+		dataSource = new CategoryDataSource(context);
+		dataSource.open();
+		
+		
+		if(dataSource.isEmpty() && !Utilities.isOnline(context)) {
+			isInitialData = true;
+		} 
+		
+		dataSource.close();
 	}
 	
 	protected SamsungRequests(Context context, String showMessage) {
@@ -42,14 +56,24 @@ public abstract class SamsungRequests extends AsyncTask<Void, Void, Void> {
 			executor = new RequestExecutor();
 		}
 		executor.addRequest(this);
+		
+		dataSource = new CategoryDataSource(context);
+		dataSource.open();
+		
+		if(dataSource.isEmpty() && !Utilities.isOnline(context)) {
+			isInitialData = true;
+		} 
+		
+		dataSource.close();
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
 
-		if (!Utilities.isOnline(context)) {
+		if (!Utilities.isOnline(context) && !isInitialData) {
 			cancel(true);
+			isInitialData = false;
 		}
 	}
 

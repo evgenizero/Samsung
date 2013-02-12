@@ -12,9 +12,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
+import bg.tarasoft.smartsales.samsung.R;
 
 public class HeaderBar extends LinearLayout implements OnClickListener {
 

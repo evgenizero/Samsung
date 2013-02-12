@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.SubCategoriesActivity;
 import bg.tarasoft.smartsales.SubSubCategoriesActivity;
 import bg.tarasoft.smartsales.bean.Category;
@@ -18,6 +17,7 @@ import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.bean.Serie;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
+import bg.tarasoft.smartsales.samsung.R;
 
 public class HeaderLabel extends LinearLayout implements OnClickListener {
 

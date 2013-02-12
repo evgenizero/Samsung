@@ -16,12 +16,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.adapters.ProductAdapterNew;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.LoggedActivity;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
+import bg.tarasoft.smartsales.samsung.R;
 import bg.tarasoft.smartsales.utilities.Utilities;
 import bg.tarasoft.smartsales.views.HeaderBar;
 
@@ -37,7 +37,7 @@ public class HTMLPlayerActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.html);
+		setContentView(bg.tarasoft.smartsales.samsung.R.layout.html);
 		
 		// Keep screen on
 		getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -77,7 +77,7 @@ public class HTMLPlayerActivity extends Activity {
 			System.out
 					.println("CATEGORIES FOR BAR: " + categoriesForBar.size());
 			for (ProductsGroup c : categoriesForBar) {
-				System.out.println(c.getName());
+				//System.out.println(c.getName());
 			}
 			headerBar.setCategories(categoriesForBar);
 			loadProduct(value);

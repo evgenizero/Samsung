@@ -42,6 +42,9 @@ public class CategoryDataSource {
 		ContentValues values = new ContentValues();
 		database.beginTransaction();
 		for (Category category : categories) {
+			
+			System.out.println("INSERT: " + category.getName() + "   " + String.valueOf(category.getIsShown()));
+			
 			values.clear();
 			values.put(MySQLiteOpenHelper.COLUMN_IS_SHOWN,
 					category.getIsShown());
@@ -111,6 +114,27 @@ public class CategoryDataSource {
 		}
 	}
 
+	public List<Category> getAllHiddenCategories(int parentId) {
+		List<Category> categories = new ArrayList<Category>();
+
+		Cursor cursor = null;
+		if (parentId != -1) {
+			cursor = database.query(
+					MySQLiteOpenHelper.TABLE_CATEGORIES,
+					allColumns,
+					MySQLiteOpenHelper.COLUMN_PARENT_ID + "="
+							+ String.valueOf(parentId), null, null, null, null);
+		}
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Category category = cursorToCategory(cursor);
+			categories.add(category);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return categories;
+	}
+	
 	public List<Category> getCategories(int parentId) {
 		List<Category> categories = new ArrayList<Category>();
 
@@ -144,9 +168,7 @@ public class CategoryDataSource {
 				MySQLiteOpenHelper.TABLE_CATEGORIES,
 				allColumns,
 				MySQLiteOpenHelper.COLUMN_CATEGORY_ID + "="
-						+ String.valueOf(categoryId) + " and "
-						+ MySQLiteOpenHelper.COLUMN_IS_SHOWN + "="
-						+ String.valueOf(1), null, null, null, null);
+						+ String.valueOf(categoryId), null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -190,6 +212,17 @@ public class CategoryDataSource {
 		return true;
 	}
 
+	public boolean isEmpty() {
+		Cursor cur = database.rawQuery("SELECT COUNT(*) FROM categories", null);
+	    if (cur != null){
+	        cur.moveToFirst();
+	        if (cur.getInt(0) == 0) {
+	        	return true;
+	        }
+	    }
+	    return false;
+	}
+	
 	private Category cursorToCategory(Cursor cursor) {
 		Category category = new Category();
 		category.setId(cursor.getInt(1));

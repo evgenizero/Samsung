@@ -2,7 +2,6 @@ package bg.tarasoft.smartsales;
 
 import java.util.ArrayList;
 
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.adapters.CategoryAdapter;
 import bg.tarasoft.smartsales.adapters.GridAdapter;
 import bg.tarasoft.smartsales.adapters.SeriesAdapter;
@@ -13,6 +12,7 @@ import bg.tarasoft.smartsales.database.CategoryDataSource;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
 import bg.tarasoft.smartsales.listeners.OnSerieClickListener;
 import bg.tarasoft.smartsales.listeners.OnSubCategoryClickListener;
+import bg.tarasoft.smartsales.samsung.R;
 import bg.tarasoft.smartsales.utilities.Utilities;
 import bg.tarasoft.smartsales.views.HeaderBar;
 import bg.tarasoft.smartsales.views.HeaderLabel;

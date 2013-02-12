@@ -171,6 +171,17 @@ public class SeriesDataSource {
 		return serie;
 	}
 
+	public boolean isEmpty() {
+		Cursor cur = database.rawQuery("SELECT COUNT(*) FROM series", null);
+	    if (cur != null){
+	        cur.moveToFirst();
+	        if (cur.getInt(0) == 0) {
+	        	return true;
+	        }
+	    }
+	    return false;
+	}
+	
 	public boolean containsSeries(int categoryId) {
 
 		Cursor cur = database.rawQuery(

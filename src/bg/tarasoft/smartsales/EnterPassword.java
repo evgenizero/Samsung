@@ -1,5 +1,6 @@
 package bg.tarasoft.smartsales;
 
+import bg.tarasoft.smartsales.samsung.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -45,7 +46,7 @@ public class EnterPassword extends Activity {
 						password.setText("");
 						context.startActivity(intent);
 					} else {
-						Toast.makeText(context, "Грешна парола",
+						Toast.makeText(context, "Грешна парола.",
 								Toast.LENGTH_SHORT).show();
 						password.setText("");
 					}

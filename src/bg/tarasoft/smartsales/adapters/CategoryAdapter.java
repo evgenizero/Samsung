@@ -7,11 +7,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 
-import bg.tarasoft.smartsales.R;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.cache.Cache;
 import bg.tarasoft.smartsales.listeners.OnCategoryListItemClickListener;
 import bg.tarasoft.smartsales.requests.DownloadImagesTask;
+import bg.tarasoft.smartsales.samsung.R;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
