@@ -43,6 +43,7 @@ public class Utilities {
 
 		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
 
+		//
 		double currentLatitude = currentLocation.getLatitude();
 		double currentLongitude = currentLocation.getLongitude();
 		
