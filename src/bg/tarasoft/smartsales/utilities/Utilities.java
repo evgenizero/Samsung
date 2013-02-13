@@ -40,12 +40,16 @@ public class Utilities {
 		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
 
 		mlocProvider = locationManager.getBestProvider(hdCrit, true);
-
-		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
-
-		//
+		
+		//TODO !!!!!!!!!!!!!!!!!!! DA SE OPRAVI !!!!!!!!!!!!
+		/*Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
+		
 		double currentLatitude = currentLocation.getLatitude();
 		double currentLongitude = currentLocation.getLongitude();
+		*/
+		double currentLatitude = 0;
+		double currentLongitude = 0;
+	
 		
 		Coordinate coordinates = new Coordinate();
 		coordinates.setLatitude(currentLatitude);

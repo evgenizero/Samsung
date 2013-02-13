@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.view.Menu;
@@ -123,6 +124,9 @@ public class MainCategories extends Activity {
 		listCategories
 				.setOnItemClickListener(new OnCategoryListItemClickListener(
 						this, headerBar));
+		
+		
+
 	}
 
 	@Override

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   android:background="@drawable/background_repeat"
+   android:background="@string/background"
     android:orientation="vertical" >
 
     <bg.tarasoft.smartsales.views.HeaderBar
@@ -22,5 +22,19 @@
         android:numColumns="@integer/sub_cat_columns"
         android:stretchMode="columnWidth"
         android:verticalSpacing="25dp" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2" >
+
+        <LinearLayout
+            android:id="@+id/buttons_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </HorizontalScrollView>
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import java.util.List;
 import org.w3c.dom.Document;
 
 import bg.tarasoft.smartsales.MainCategories;
+import bg.tarasoft.smartsales.SubCategoriesActivity;
 import bg.tarasoft.smartsales.bean.Serie;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
 import bg.tarasoft.smartsales.parser.ParseXml;
@@ -48,7 +49,7 @@ public class GetSeriesRequest extends SamsungGetRequest {
 
 		if (!error) {
 
-			((MainCategories) context).processData();
+			((SubCategoriesActivity) context).processData();
 
 		}
 	}

@@ -13,6 +13,7 @@ import org.xml.sax.SAXParseException;
 
 import bg.tarasoft.smartsales.HTMLPlayerActivity;
 import bg.tarasoft.smartsales.MainCategories;
+import bg.tarasoft.smartsales.SubCategoriesActivity;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.Checksum;
 import bg.tarasoft.smartsales.bean.Product;
@@ -62,7 +63,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 
 		if (!Utilities.isOnline(context)) {
 			if (type.equals("xml_categories")) {
-				((MainCategories) context).processData();
+				((SubCategoriesActivity) context).processData();
 			}
 			executor.clear();
 			dataSource.close();
@@ -158,7 +159,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 						&& oldChecksum.getValue().equals(newChecksum)) {
 
 					if (type.equals("xml_categories")) {
-						((MainCategories) context).processData();
+						((SubCategoriesActivity) context).processData();
 					} else
 					// contains number
 					if (type.matches(".*\\d.*") && toOpen) {

@@ -1,6 +1,7 @@
 package bg.tarasoft.smartsales;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import bg.tarasoft.smartsales.adapters.CategoryAdapter;
 import bg.tarasoft.smartsales.adapters.GridAdapter;
@@ -16,6 +17,7 @@ import bg.tarasoft.smartsales.samsung.R;
 import bg.tarasoft.smartsales.utilities.Utilities;
 import bg.tarasoft.smartsales.views.HeaderBar;
 import bg.tarasoft.smartsales.views.HeaderLabel;
+import bg.tarasoft.smartsales.views.MenuButton;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SubSubCategoriesActivity extends Activity {
@@ -37,6 +40,7 @@ public class SubSubCategoriesActivity extends Activity {
 	private ArrayList<ProductsGroup> categoriesForBar;
 	private int id;
 	private int logType;
+	private LinearLayout buttonsContainer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,8 @@ public class SubSubCategoriesActivity extends Activity {
 
 		System.out.println("CREATED SUBCAT ACTIVITy");
 		gridView = (GridView) findViewById(R.id.sub_categories);
-
+		buttonsContainer = (LinearLayout) findViewById(R.id.buttons_container);
+		
 		dataSource = new CategoryDataSource(this);
 		dataSource.open();
 		seriesDataSource = new SeriesDataSource(this);
@@ -110,7 +115,10 @@ public class SubSubCategoriesActivity extends Activity {
 
 			}
 			Utilities.addToLog(getApplicationContext(), id, logType);
-
+			List<Category> categories = dataSource.getCategories(0);
+			for(Category c : categories){
+				buttonsContainer.addView(new MenuButton(mContext, c,headerBar));
+			}
 		} else {
 			System.out.println("EXTRAS ARE NULL");
 		}
