@@ -9,7 +9,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Alarm alarm = new Alarm();
 		alarm.SetAlarm(context);
-		Intent startServiceIntent = new Intent(context, MainCategories.class);
+		Intent startServiceIntent = new Intent(context, SubCategoriesActivity.class);
 		startServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(startServiceIntent);
 		// context.startService(startServiceIntent);

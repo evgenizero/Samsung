@@ -1,54 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#ffffff00"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
-
-    <bg.tarasoft.smartsales.views.ResizableImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/product_item_height"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="3"
-        android:background="@drawable/product_background_test"
-        android:src="@drawable/no_photo" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#ff0000ff"
+        android:layout_height="@dimen/product_item_height"
+        android:background="@drawable/prod_shape2"  >
+
+        <bg.tarasoft.smartsales.views.ResizableImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/no_photo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/product_label_height"
+         android:background="@color/text_color"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/text"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_marginLeft="@dimen/margin_small"
-            android:layout_marginRight="1dp"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_weight="2.7"
-            android:background="#ffff0000"
+            android:layout_weight="8"
+            android:background="@drawable/prod_left_part"
             android:gravity="center"
-            android:text="SHalalalalal"
+            android:text="SHalalalalalssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/grid_item_text_size" />
+            android:textSize="@dimen/grid_item_text_size"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/text_num_prod"
+            android:id="@+id/text2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_marginRight="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:background="@drawable/prod_right_part"
             android:gravity="center"
-            android:text="422"
+            android:text="442"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/grid_item_text_size" />
+            android:textSize="@dimen/grid_item_text_size"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>
