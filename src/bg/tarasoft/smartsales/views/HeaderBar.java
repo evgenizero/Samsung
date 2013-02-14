@@ -31,15 +31,15 @@ public class HeaderBar extends LinearLayout implements OnClickListener {
 		super(context, attrs);
 		inflateView(context);
 		mContext = context;
-		labelsContainer = (LinearLayout) view
-				.findViewById(R.id.labels_container);
-		labels = new ArrayList<HeaderLabel>();
-		for (HeaderLabel h : labels) {
-			h.setCategoriesForBar(getLabelsCategories());
-			addLabeltoHeader(h);
-			h.setHeaderBar(this);
-		}
-		this.setOnClickListener(this);
+//		labelsContainer = (LinearLayout) view
+//				.findViewById(R.id.labels_container);
+//		labels = new ArrayList<HeaderLabel>();
+//		for (HeaderLabel h : labels) {
+//			h.setCategoriesForBar(getLabelsCategories());
+//			addLabeltoHeader(h);
+//			h.setHeaderBar(this);
+//		}
+//		this.setOnClickListener(this);
 
 	}
 
@@ -78,17 +78,17 @@ public class HeaderBar extends LinearLayout implements OnClickListener {
 	}
 
 	public void setCategories(ArrayList<ProductsGroup> categoriesForBar) {
-		// TODO optimize for loop
-		for (int i = 0; i < categoriesForBar.size(); ++i) {
-			labels.add(new HeaderLabel(mContext, categoriesForBar.get(i)));
-			
-		}
-		// labelsContainer.removeAllViews();
-		for (HeaderLabel h : labels) {
-			System.out.println("ADDING LABELS: " + h.getCategory().getName());
-			addLabeltoHeader(h);
-		}
-
+//		// TODO optimize for loop
+//		for (int i = 0; i < categoriesForBar.size(); ++i) {
+//			labels.add(new HeaderLabel(mContext, categoriesForBar.get(i)));
+//			
+//		}
+//		// labelsContainer.removeAllViews();
+//		for (HeaderLabel h : labels) {
+//			System.out.println("ADDING LABELS: " + h.getCategory().getName());
+//			addLabeltoHeader(h);
+//		}
+//
 	}
 
 }
