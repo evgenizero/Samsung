@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="@drawable/header_label"
+        android:background="@drawable/bottom_buttons"
         android:clickable="true"
         android:ellipsize="end"
         android:gravity="center"

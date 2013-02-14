@@ -10,6 +10,7 @@
     <dimen name="category_text_height">80dp</dimen>
     <dimen name="category_image_width">230dp</dimen>
     <dimen name="category_image_height">190dp</dimen>
+    <dimen name="bottom_bar_cell_width">150dp</dimen>
 
     <integer name="columns">2</integer>
      <item name="header_pholder_weight" format="float" type="dimen">0</item>

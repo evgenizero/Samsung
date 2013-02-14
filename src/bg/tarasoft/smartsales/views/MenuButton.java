@@ -45,7 +45,8 @@ public class MenuButton extends LinearLayout implements OnClickListener {
 		view = layoutInflater.inflate(R.layout.header_label, this);
 		// TODO VVV tva e zashtoto neshto ne se zimat parametrite ot XML - da se
 		// opravi
-		view.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
+		float width = getResources().getDimension(R.dimen.bottom_bar_cell_width);
+		view.setLayoutParams(new LayoutParams((int) width, LayoutParams.MATCH_PARENT, 1));
 	}
 
 	

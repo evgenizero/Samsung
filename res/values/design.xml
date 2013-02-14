@@ -13,6 +13,7 @@
     <dimen name="category_text_height">40dp</dimen>
     <dimen name="category_image_width">110dp</dimen>
     <dimen name="category_image_height">90dp</dimen>
+    <dimen name="bottom_bar_cell_width">100dp</dimen>
 
     <integer name="columns">2</integer>
     <integer name="sub_cat_columns">2</integer>
@@ -20,6 +21,6 @@
     <item name="category_text_weight" format="float" type="dimen">3</item>
     <item name="header_pholder_weight" format="float" type="dimen">0</item>
 
-    <color name="text_color">@android:color/white</color>
+    <color name="text_color">#ff0000ff</color>
 
 </resources>
