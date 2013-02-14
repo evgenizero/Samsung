@@ -53,7 +53,7 @@ public class MainCategories extends Activity {
 
 	private ListView listCategories;
 	private CategoryDataSource dataSource;
-	private HeaderBar headerBar;
+	//private HeaderBar headerBar;
 
 	private Button settingsButton;
 
@@ -80,7 +80,7 @@ public class MainCategories extends Activity {
 		getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		// LoggedActivity.sendLog(this);
-		headerBar = (HeaderBar) findViewById(R.id.header_bar);
+		//headerBar = (HeaderBar) findViewById(R.id.header_bar);
 		Category cat = new Category();
 		cat.setName("first");
 
@@ -120,9 +120,9 @@ public class MainCategories extends Activity {
 		List<Category> categories = dataSource.getCategories(0);
 		CategoryAdapter adapter = new CategoryAdapter(this, categories);
 		listCategories.setAdapter(adapter);
-		listCategories
-				.setOnItemClickListener(new OnCategoryListItemClickListener(
-						this, headerBar));
+		//listCategories
+		//		.setOnItemClickListener(new OnCategoryListItemClickListener(
+		//				this, headerBar));
 	}
 
 	@Override
