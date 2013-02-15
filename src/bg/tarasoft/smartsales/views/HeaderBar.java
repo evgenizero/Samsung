@@ -67,8 +67,10 @@ public class HeaderBar extends LinearLayout implements OnClickListener {
 
 	public ArrayList<ProductsGroup> getLabelsCategories() {
 		ArrayList<ProductsGroup> productsGroup = new ArrayList<ProductsGroup>();
-		for (HeaderLabel h : labels) {
-			productsGroup.add(h.getCategory());
+		if(labels != null) {
+			for (HeaderLabel h : labels) {
+				productsGroup.add(h.getCategory());
+			}
 		}
 		return productsGroup;
 	}

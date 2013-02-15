@@ -18,6 +18,7 @@ public class GridAdapter extends BaseAdapter {
 	private class ViewHolder {
 		ImageView image;
 		TextView text;
+		TextView text2;
 	}
 
 	public GridAdapter(Context context, List<Category> categories) {
@@ -43,6 +44,7 @@ public class GridAdapter extends BaseAdapter {
 			convertView = View.inflate(context, R.layout.grid_item, null);
 			holder = new ViewHolder();
 			holder.text = (TextView) convertView.findViewById(R.id.text);
+			holder.text2 = (TextView) convertView.findViewById(R.id.text2);
 
 			convertView.setTag(holder);
 		} else {

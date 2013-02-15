@@ -1,6 +1,7 @@
 package bg.tarasoft.smartsales.database;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import bg.tarasoft.smartsales.bean.Category;
@@ -22,7 +23,7 @@ public class ProductDataSource {
 			MySQLiteOpenHelper.COLUMN_CATEGORY_ID,
 			MySQLiteOpenHelper.COLUMN_NAME,
 			MySQLiteOpenHelper.COLUMN_PARENT_CATEGORY_ID,
-			MySQLiteOpenHelper.COLUMN_PIC, MySQLiteOpenHelper.COLUMN_STATUS};
+			MySQLiteOpenHelper.COLUMN_PIC, MySQLiteOpenHelper.COLUMN_STATUS };
 
 	public ProductDataSource(Context context) {
 		dbHelper = new MySQLiteOpenHelper(context);
@@ -34,6 +35,36 @@ public class ProductDataSource {
 
 	public void close() {
 		dbHelper.close();
+	}
+
+	public HashMap<Integer, Integer> getNumberOfProducts(
+			List<Category> categories) {
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		StringBuilder query = new StringBuilder();
+		for (int i = 0; i < categories.size() - 1; i++) {
+			query.append(String.valueOf(categories.get(i).getId()) + ",");
+		}
+		query.append(String.valueOf(categories.get(categories.size() - 1)
+				.getId()));
+		Cursor cursor = database.rawQuery(
+				"select category_id, count(*) from products where category_id in ("
+						+ query.toString() + ") group by category_id;", null);
+
+		System.out
+				.println(":ALFHL:ADFHJADFH:A:DFHAL:HDF:  "
+						+ "select category_id, count(*) from products where category_id in ("
+						+ query.toString() + ") group by category_id;");
+
+		System.out.println("SIZE: " + cursor.getCount());
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			System.out.println("IN IN IN IN IN ");
+			map.put(cursor.getInt(0), cursor.getInt(1));
+			cursor.moveToNext();
+		}
+		cursor.close();
+		System.out.println("QUERYYYY:   " + map);
+		return map;
 	}
 
 	public void insertProducts(List<Product> products, ProgressDialog progress) {

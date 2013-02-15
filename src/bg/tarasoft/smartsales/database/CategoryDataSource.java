@@ -1,6 +1,7 @@
 package bg.tarasoft.smartsales.database;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import bg.tarasoft.smartsales.bean.Category;

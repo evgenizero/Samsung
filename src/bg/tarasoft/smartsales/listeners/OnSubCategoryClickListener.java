@@ -22,15 +22,17 @@ public class OnSubCategoryClickListener implements OnItemClickListener {
 	private SeriesDataSource dataSource;
 	private CategoryDataSource catDS;
 	private ArrayList<Category> categoriesForBar;
+	private Integer currentCategory;
 
 	public OnSubCategoryClickListener(Context context, String parentName,
-			SeriesDataSource dataSource, ArrayList<Category> categoriesForBar) {
+			SeriesDataSource dataSource, ArrayList<Category> categoriesForBar,
+			Integer currentCategory) {
 		this.context = context;
 		this.categoriesForBar = categoriesForBar;
 		this.parentName = parentName;
 		this.dataSource = dataSource;
 		catDS = new CategoryDataSource(context);
-
+		this.currentCategory = currentCategory;
 	}
 
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
@@ -59,6 +61,7 @@ public class OnSubCategoryClickListener implements OnItemClickListener {
 
 		}
 		catDS.close();
+		intent.putExtra("masterParentId", currentCategory);
 		intent.putExtra("headerBar", categoriesForBar);
 		intent.putExtra("subCatName", category.getName());
 		intent.putExtra("categoryName", parentName);

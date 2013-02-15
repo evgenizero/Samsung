@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.List;
 
 import bg.tarasoft.smartsales.bean.Category;
@@ -31,7 +32,8 @@ public class CategoryAdapter extends BaseAdapter {
 	private Context context;
 	private List<Category> categories;
 	private int layoutId;
-	
+	private HashMap<Integer, Integer> items;
+
 	private static final int LIST_ITEM_LEFT = 0;
 	private static final int LIST_ITEM_RIGHT = 1;
 	private static final int LAYOUTS_MAX_COUNT = 2;
@@ -39,6 +41,7 @@ public class CategoryAdapter extends BaseAdapter {
 	private class CategoryHolder {
 		ImageView image;
 		TextView text;
+		TextView text2;
 	}
 
 	public CategoryAdapter(Context context, List<Category> categories,
@@ -50,6 +53,13 @@ public class CategoryAdapter extends BaseAdapter {
 	public CategoryAdapter(Context context, List<Category> categories) {
 		this.context = context;
 		this.categories = categories;
+	}
+
+	public CategoryAdapter(Context context, List<Category> categories,
+			int layoutId, HashMap<Integer, Integer> items) {
+		this(context, categories, layoutId);
+		this.items = items;
+		System.out.println("ASLFHA:LSGH:ASGHA:SG:  " + items);
 	}
 
 	public int getCount() {
@@ -85,15 +95,18 @@ public class CategoryAdapter extends BaseAdapter {
 				convertView = View.inflate(context, layoutId, null);
 			} else {
 				int layout = getItemViewType(position);
-				if(layout == LIST_ITEM_LEFT) {
-					convertView = View.inflate(context, R.layout.list_item_left, null);
+				if (layout == LIST_ITEM_LEFT) {
+					convertView = View.inflate(context,
+							R.layout.list_item_left, null);
 				} else {
-					convertView = View.inflate(context, R.layout.list_item, null);
+					convertView = View.inflate(context, R.layout.list_item,
+							null);
 				}
 			}
 			holder = new CategoryHolder();
 			holder.image = (ImageView) convertView.findViewById(R.id.image);
 			holder.text = (TextView) convertView.findViewById(R.id.text);
+			holder.text2 = (TextView) convertView.findViewById(R.id.text2);
 
 			convertView.setTag(holder);
 		} else {
@@ -119,6 +132,15 @@ public class CategoryAdapter extends BaseAdapter {
 		}
 
 		holder.text.setText(item.getName());
+		
+		if(items != null) {
+			Integer num = items.get(item.getId());
+			if(num != null) {
+				holder.text2.setText(String.valueOf(num));
+			} else {
+				holder.text2.setText(" ");
+			}
+		}
 
 		convertView.requestLayout();
 		return convertView;

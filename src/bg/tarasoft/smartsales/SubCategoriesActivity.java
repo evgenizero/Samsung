@@ -12,9 +12,11 @@ import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.LoggedActivity;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
+import bg.tarasoft.smartsales.database.ProductDataSource;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
 import bg.tarasoft.smartsales.listeners.OnCategoryListItemClickListener;
 import bg.tarasoft.smartsales.listeners.OnSerieClickListener;
+import bg.tarasoft.smartsales.listeners.OnSettingsButtonClick;
 import bg.tarasoft.smartsales.listeners.OnSubCategoryClickListener;
 import bg.tarasoft.smartsales.requests.GetCategoriesRequest;
 import bg.tarasoft.smartsales.requests.GetChecksumRequest;
@@ -36,15 +38,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SubCategoriesActivity extends Activity {
 
 	private GridView gridView;
 	private CategoryDataSource dataSource;
 	private SeriesDataSource seriesDataSource;
+	private ProductDataSource productsDataSource;
 	private Context mContext;
 	private HeaderBar headerBar;
 	private ArrayList<ProductsGroup> categoriesForBar;
@@ -52,6 +57,8 @@ public class SubCategoriesActivity extends Activity {
 	private int logType;
 	private Category firstCategory;
 	private LinearLayout buttonsContainer;
+	private Integer currentCategory;
+	private Button settingsButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +74,17 @@ public class SubCategoriesActivity extends Activity {
 		dataSource = new CategoryDataSource(this);
 		dataSource.open();
 
-		
 		seriesDataSource = new SeriesDataSource(this);
 		seriesDataSource.open();
+
+		productsDataSource = new ProductDataSource(this);
+		productsDataSource.open();
+
 		headerBar = (HeaderBar) findViewById(R.id.header_bar);
 		buttonsContainer = (LinearLayout) findViewById(R.id.buttons_container);
+		settingsButton = (Button) findViewById(R.id.settingsButton);
+		settingsButton.setOnTouchListener(new OnSettingsButtonClick(this));
+
 		mContext = this;
 
 		final Bundle extras = getIntent().getExtras();
@@ -89,6 +102,11 @@ public class SubCategoriesActivity extends Activity {
 			if (o != null) {
 				id = (Integer) o;
 				logType = LoggedActivity.CATEGORY;
+				currentCategory = id;
+			}
+			Object master = extras.get("masterParentId");
+			if (master != null) {
+				currentCategory = (Integer) master;
 			}
 			if (!extras.getBoolean("noSeries")) {
 				System.out.println();
@@ -118,26 +136,40 @@ public class SubCategoriesActivity extends Activity {
 						.getInt("categoryId"))) {
 					System.out.println(c.getName());
 				}
+				List<Category> cats = dataSource.getCategories(id);
 				System.out.println("SETTING SECOND ADAPTER");
-				gridView.setAdapter(new CategoryAdapter(this, dataSource
-						.getCategories(id), R.layout.grid_item));
+				gridView.setAdapter(new CategoryAdapter(this, cats,
+						R.layout.grid_item, productsDataSource
+								.getNumberOfProducts(cats)));
 
 				gridView.setOnItemClickListener(new OnSubCategoryClickListener(
 						this, categoryName, seriesDataSource,
-						(ArrayList<Category>) extras.get("headerBar")));
+						(ArrayList<Category>) extras.get("headerBar"),
+						currentCategory));
 
 			}
 			Utilities.addToLog(getApplicationContext(), id, logType);
 			List<Category> categories = dataSource.getCategories(0);
-			for(Category c : categories){
-				buttonsContainer.addView(new MenuButton(mContext, c,headerBar));
+
+			if (currentCategory == null) {
+				currentCategory = id;
+			}
+
+			for (Category c : categories) {
+				if (c.getId() == currentCategory) {
+					buttonsContainer.addView(new MenuButton(mContext, c,
+							headerBar, true));
+				} else {
+					buttonsContainer.addView(new MenuButton(mContext, c,
+							headerBar));
+				}
 			}
 
 		} else {
-			
+
 			System.out.println("EXTRAS ARE NULL");
 			// new shit
-			
+
 			if (dataSource.isEmpty() && !Utilities.isOnline(this)) {
 				AssetManager assets = getAssets();
 				try {
@@ -159,59 +191,67 @@ public class SubCategoriesActivity extends Activity {
 				SamsungRequests.getExecutor().execute();
 			}
 
-		
-
-		
-			
 			/*
-			List<Category> categories = dataSource.getCategories(0);
-			firstCategory = categories.get(0);
-			gridView.setAdapter(new CategoryAdapter(this, dataSource
-					.getCategories(firstCategory.getId()), R.layout.grid_item));
-
-			gridView.setOnItemClickListener(new OnSubCategoryClickListener(
-					this, firstCategory.getName(), seriesDataSource,
-					new ArrayList<Category>()));
-*/
+			 * List<Category> categories = dataSource.getCategories(0);
+			 * firstCategory = categories.get(0); gridView.setAdapter(new
+			 * CategoryAdapter(this, dataSource
+			 * .getCategories(firstCategory.getId()), R.layout.grid_item));
+			 * 
+			 * gridView.setOnItemClickListener(new OnSubCategoryClickListener(
+			 * this, firstCategory.getName(), seriesDataSource, new
+			 * ArrayList<Category>()));
+			 */
 		}
-		
-		if(extras != null){
-			categoriesForBar = (ArrayList<ProductsGroup>) extras.get("headerBar");
+
+		if (extras != null) {
+			categoriesForBar = (ArrayList<ProductsGroup>) extras
+					.get("headerBar");
 			if (extras.getBoolean("addToBar")) {
 				categoriesForBar.add(dataSource.getCategory(id));
 			}
-		}else {
+		} else {
 			categoriesForBar = new ArrayList<ProductsGroup>();
 			categoriesForBar.add(firstCategory);
+
 		}
-		
 
-
-		//	headerBar.setCategories(categoriesForBar);
+		// headerBar.setCategories(categoriesForBar);
 
 		dataSource.close();
 		seriesDataSource.close();
+		productsDataSource.close();
 	}
+
 	public void processData() {
 		List<Category> categories = dataSource.getCategories(0);
 		firstCategory = categories.get(0);
-		gridView.setAdapter(new CategoryAdapter(this, dataSource
-				.getCategories(firstCategory.getId()), R.layout.grid_item));
-
-		gridView.setOnItemClickListener(new OnSubCategoryClickListener(
-				this, firstCategory.getName(), seriesDataSource,
-				new ArrayList<Category>()));
-
-		for(Category c : categories){
-			buttonsContainer.addView(new MenuButton(mContext, c,headerBar));
+		List<Category> cats = dataSource.getCategories(firstCategory.getId());
+		gridView.setAdapter(new CategoryAdapter(this, cats, R.layout.grid_item,
+				productsDataSource.getNumberOfProducts(cats)));
+		if (currentCategory == null) {
+			currentCategory = categories.get(0).getId();
 		}
+		gridView.setOnItemClickListener(new OnSubCategoryClickListener(this,
+				firstCategory.getName(), seriesDataSource,
+				new ArrayList<Category>(), currentCategory));
 
+		for (Category c : categories) {
+			if (c.getId() == currentCategory) {
+				buttonsContainer.addView(new MenuButton(mContext, c, headerBar,
+						true));
+			} else {
+				buttonsContainer
+						.addView(new MenuButton(mContext, c, headerBar));
+			}
+		}
 	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		dataSource.close();
 		seriesDataSource.close();
+		productsDataSource.close();
 	}
 
 	@Override
@@ -219,12 +259,13 @@ public class SubCategoriesActivity extends Activity {
 		super.onResume();
 		dataSource.open();
 		seriesDataSource.open();
+		productsDataSource.open();
 	}
 
-	public void onSmartSalesClick(View v) {
-		Intent intent = new Intent(this, MainCategories.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
-	}
+	// public void onSmartSalesClick(View v) {
+	// Intent intent = new Intent(this, MainCategories.class);
+	// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	// startActivity(intent);
+	// }
 
 }

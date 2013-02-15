@@ -6,11 +6,26 @@
     android:background="@drawable/main_back"
     android:orientation="vertical" >
 
-    <bg.tarasoft.smartsales.views.HeaderBar
-        android:id="@+id/header_bar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bar_height" >
-    </bg.tarasoft.smartsales.views.HeaderBar>
+        android:layout_height="wrap_content" >
+
+        <bg.tarasoft.smartsales.views.HeaderBar
+            android:id="@+id/header_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bar_height" >
+        </bg.tarasoft.smartsales.views.HeaderBar>
+
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/bar_height"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:text="Button"
+            android:textColor="@android:color/transparent"
+            android:visibility="visible" />
+    </RelativeLayout>
 
     <GridView
         android:id="@+id/sub_categories"

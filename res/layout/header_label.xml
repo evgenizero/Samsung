@@ -16,7 +16,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:text="h_label"
-        android:textColor="@color/text_color"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/grid_item_text_size" />
 
 </LinearLayout>

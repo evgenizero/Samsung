@@ -111,7 +111,7 @@ public class SubSubCategoriesActivity extends Activity {
 
 				gridView.setOnItemClickListener(new OnSubCategoryClickListener(
 						this, categoryName, seriesDataSource,
-						(ArrayList<Category>) extras.get("headerBar")));
+						(ArrayList<Category>) extras.get("headerBar"),0));
 
 			}
 			Utilities.addToLog(getApplicationContext(), id, logType);
