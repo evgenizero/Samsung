@@ -9,11 +9,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:clickable="true"
+        android:gravity="center"
+        android:textColor="@android:color/black"
         android:text="TextView" />
 
     <CheckBox
         android:id="@+id/checkBox"
+        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

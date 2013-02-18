@@ -154,7 +154,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 			if (oldChecksum != null) {
 				System.out.println("OLD CHECKSUM = " + oldChecksum.getValue());
 			}
-			if (!newChecksum.equals("No product.")) {
+			if (!"No product.".equals(newChecksum)) {
 				if (oldChecksum != null
 						&& oldChecksum.getValue().equals(newChecksum)) {
 

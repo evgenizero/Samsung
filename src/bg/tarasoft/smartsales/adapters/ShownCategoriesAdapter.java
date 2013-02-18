@@ -85,7 +85,7 @@ public class ShownCategoriesAdapter extends BaseAdapter {
 			holder.checkBox.setChecked(false);
 		}
 		
-		holder.checkBox.setOnCheckedChangeListener(new OnChooseCategoryListener(item));
+		holder.checkBox.setOnCheckedChangeListener(new OnChooseCategoryListener(context,item,dataSource));
 
 		return convertView;
 	}

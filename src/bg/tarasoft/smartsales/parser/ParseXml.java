@@ -17,6 +17,7 @@ import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.Product;
 import bg.tarasoft.smartsales.bean.Serie;
 import bg.tarasoft.smartsales.bean.Store;
+import bg.tarasoft.smartsales.bean.StoreType;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
 import bg.tarasoft.smartsales.database.SeriesProductsDataSource;
 
@@ -32,6 +33,7 @@ public class ParseXml {
 	private static final String PIC = "pic";
 	private static final String SORTORDER = "sortorder";
 	private static final String STORE = "store";
+	private static final String STORE_CONTR = "retail_contr";
 	private static final String STORE_NUMBER = "store_number";
 
 	private static String ITEM = "item";
@@ -214,16 +216,16 @@ public class ParseXml {
 		String status = getElementByName(firstPersonElement, "status");
 		if (status.equals("new")) {
 			product.setLabel(Product.LABEL_NEW);
-			Log.d("asd","Setting STATUS: NEW");
+			Log.d("asd", "Setting STATUS: NEW");
 		} else if (status.equals("last")) {
 			product.setLabel(Product.LABEL_LAST);
-			Log.d("asd","Setting STATUS: LAST");
+			Log.d("asd", "Setting STATUS: LAST");
 		} else if (status.equals("promo")) {
 			product.setLabel(Product.LABEL_PROMO);
-			Log.d("asd","Setting STATUS: PROMO");
+			Log.d("asd", "Setting STATUS: PROMO");
 		} else {
 			product.setLabel(Product.LABEL_NONE);
-			Log.d("asd","Setting STATUS: NONE");
+			Log.d("asd", "Setting STATUS: NONE");
 		}
 	}
 
@@ -250,32 +252,64 @@ public class ParseXml {
 		return value;
 	}
 
-	public static void parseStores(Document doc, List<Store> stores,
+	public static void parseStores(Document doc, List<StoreType> storeRetails,
 			Context context) {
-		
-		try {
-		
-		NodeList listOfStores = doc.getElementsByTagName(STORE);
-		
-		Store store = null;
 
-		for (int s = 0; s < listOfStores.getLength(); s++) {
-			Node firstPersonNode = listOfStores.item(s);
-			if (firstPersonNode.getNodeType() == Node.ELEMENT_NODE) {
-				Element firstPersonElement = (Element) firstPersonNode;
-				store = new Store();
-				store.setStoreID(Integer.valueOf(getElementByName(
-						firstPersonElement, ID)));
-				store.setStoreName(String.valueOf(getElementByName(
-						firstPersonElement, NAME)));
-				//store.setHallId(Integer.valueOf(getElementByName(firstPersonElement, STORE_NUMBER)));	
-								
-				stores.add(store);
+		try {
+
+			NodeList listOfRetails = doc.getElementsByTagName(STORE_CONTR);
+
+			Store store = null;
+			List<Store> storeList = null;
+			StoreType storeRetail = null;
+
+			for (int s = 0; s < listOfRetails.getLength(); s++) {
+				Node firstPersonNode = listOfRetails.item(s);
+				if (firstPersonNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element firstPersonElement = (Element) firstPersonNode;
+
+					storeRetail = new StoreType();
+					storeRetail.setId(Integer.valueOf(getElementByName(
+							firstPersonElement, ID)));
+					storeRetail.setName(String.valueOf(getElementByName(
+							firstPersonElement, NAME)));
+
+					NodeList nodesList = firstPersonElement.getChildNodes();
+					for (int i = 0; i < nodesList.getLength(); i++) {
+						Node n = nodesList.item(i);
+						if (n.getNodeName().equals("stores")) {
+							NodeList childNodes = n.getChildNodes();
+							storeList = new ArrayList<Store>();
+							for (int j = 0; j < childNodes.getLength(); j++) {
+								Node child = childNodes.item(j);
+								if (child.getNodeType() == Node.ELEMENT_NODE) {
+									Element storeElement = (Element) child;
+									store = new Store();
+									store.setStoreID(Integer
+											.valueOf(getElementByName(
+													storeElement, ID)));
+									store.setStoreName(String
+											.valueOf(getElementByName(
+													storeElement, NAME)));
+//									store.setHallId(Integer
+//											.valueOf(getElementByName(
+//													storeElement, STORE_NUMBER)));
+
+									storeList.add(store);
+								}
+							}
+							storeRetail.setStores(storeList);
+						}
+					}
+				}
+				storeRetails.add(storeRetail);
 			}
+			for(StoreType el : storeRetails) {
+				System.out.println("RETAIL: " + el.getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-		
+
 	}
 }

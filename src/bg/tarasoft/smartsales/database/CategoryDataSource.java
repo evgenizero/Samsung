@@ -43,9 +43,10 @@ public class CategoryDataSource {
 		ContentValues values = new ContentValues();
 		database.beginTransaction();
 		for (Category category : categories) {
-			
-			System.out.println("INSERT: " + category.getName() + "   " + String.valueOf(category.getIsShown()));
-			
+
+			System.out.println("INSERT: " + category.getName() + "   "
+					+ String.valueOf(category.getIsShown()));
+
 			values.clear();
 			values.put(MySQLiteOpenHelper.COLUMN_IS_SHOWN,
 					category.getIsShown());
@@ -56,6 +57,9 @@ public class CategoryDataSource {
 							+ category.getId(), null);
 
 		}
+		
+		
+		
 		database.setTransactionSuccessful();
 		database.endTransaction();
 	}
@@ -120,10 +124,8 @@ public class CategoryDataSource {
 
 		Cursor cursor = null;
 		if (parentId != -1) {
-			cursor = database.query(
-					MySQLiteOpenHelper.TABLE_CATEGORIES,
-					allColumns,
-					MySQLiteOpenHelper.COLUMN_PARENT_ID + "="
+			cursor = database.query(MySQLiteOpenHelper.TABLE_CATEGORIES,
+					allColumns, MySQLiteOpenHelper.COLUMN_PARENT_ID + "="
 							+ String.valueOf(parentId), null, null, null, null);
 		}
 		cursor.moveToFirst();
@@ -135,7 +137,7 @@ public class CategoryDataSource {
 		cursor.close();
 		return categories;
 	}
-	
+
 	public List<Category> getCategories(int parentId) {
 		List<Category> categories = new ArrayList<Category>();
 
@@ -159,16 +161,16 @@ public class CategoryDataSource {
 			categories.add(category);
 			cursor.moveToNext();
 		}
+
 		cursor.close();
+		
 		return categories;
 	}
 
 	public Category getCategory(int categoryId) {
 		Category category = null;
-		Cursor cursor = database.query(
-				MySQLiteOpenHelper.TABLE_CATEGORIES,
-				allColumns,
-				MySQLiteOpenHelper.COLUMN_CATEGORY_ID + "="
+		Cursor cursor = database.query(MySQLiteOpenHelper.TABLE_CATEGORIES,
+				allColumns, MySQLiteOpenHelper.COLUMN_CATEGORY_ID + "="
 						+ String.valueOf(categoryId), null, null, null, null);
 
 		cursor.moveToFirst();
@@ -215,15 +217,41 @@ public class CategoryDataSource {
 
 	public boolean isEmpty() {
 		Cursor cur = database.rawQuery("SELECT COUNT(*) FROM categories", null);
-	    if (cur != null){
-	        cur.moveToFirst();
-	        if (cur.getInt(0) == 0) {
-	        	return true;
-	        }
-	    }
-	    return false;
+		if (cur != null) {
+			cur.moveToFirst();
+			if (cur.getInt(0) == 0) {
+				return true;
+			}
+		}
+		return false;
 	}
-	
+
+	public int getCount(Category parent) {
+		Cursor cursor = database.rawQuery(
+				"select count(*) from categories where "
+						+ MySQLiteOpenHelper.COLUMN_PARENT_ID + "= ?",
+				new String[] { String.valueOf(parent.getId()) });
+		if (cursor != null) {
+			cursor.moveToFirst();
+			return cursor.getInt(0);
+		}
+		return 0;
+	}
+
+	public int getCount(Category parent, int isShown) {
+		Cursor cursor = database.rawQuery(
+				"select count(*) from categories where "
+						+ MySQLiteOpenHelper.COLUMN_PARENT_ID + "= ? and "
+						+ MySQLiteOpenHelper.COLUMN_IS_SHOWN + "= ?",
+				new String[] { String.valueOf(parent.getId()),
+						String.valueOf(isShown) });
+		if (cursor != null) {
+			cursor.moveToFirst();
+			return cursor.getInt(0);
+		}
+		return 0;
+	}
+
 	private Category cursorToCategory(Cursor cursor) {
 		Category category = new Category();
 		category.setId(cursor.getInt(1));

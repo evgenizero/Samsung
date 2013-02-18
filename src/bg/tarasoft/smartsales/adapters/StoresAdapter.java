@@ -4,6 +4,7 @@ import java.util.List;
 
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.Store;
+import bg.tarasoft.smartsales.bean.StoreType;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
 import bg.tarasoft.smartsales.database.StoresDataSource;
 import bg.tarasoft.smartsales.listeners.OnChooseCategoryListener;
@@ -24,7 +25,7 @@ import android.widget.TextView;
 
 public class StoresAdapter extends BaseAdapter {
 	private Context context;
-	private List<Store> stores;
+	private List<StoreType> storeRetails;
 	private SharedPreferences preferences;
 	private int storeId = -1;
 	
@@ -33,19 +34,19 @@ public class StoresAdapter extends BaseAdapter {
 		RadioButton radioButton;
 	}
 
-	public StoresAdapter(Context context, List<Store> stores) {
+	public StoresAdapter(Context context, List<StoreType> storeRetails) {
 		this.context = context;
-		this.stores = stores;
+		this.storeRetails = storeRetails;
 		preferences = context.getSharedPreferences("settings", 0);
 		storeId = preferences.getInt("store_id", -1);
 	}
 
 	public int getCount() {
-		return stores.size();
+		return storeRetails.size();
 	}
 
 	public Object getItem(int position) {
-		return stores.get(position);
+		return storeRetails.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -53,7 +54,7 @@ public class StoresAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final Store item = (Store) getItem(position);
+		final StoreType item = (StoreType) getItem(position);
 		final ViewHolder holder;
 		//if (convertView == null || convertView.getTag() == null) {
 			convertView = View.inflate(context, R.layout.store_list_item, null);
@@ -61,22 +62,22 @@ public class StoresAdapter extends BaseAdapter {
 			holder.storeName = (TextView) convertView.findViewById(R.id.store_name);
 			holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton1);
 
-			holder.radioButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					if(isChecked) {
-						item.setIsChosen(true);
-						storeId = item.getStoreID();
-						for(Store store : stores) {
-							if(store.getStoreID() != item.getStoreID()) {
-								store.setIsChosen(false);
-							}
-						}
-						notifyDataSetChanged();
-					} 
-					
-				}
-			});
+//			holder.radioButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+//				
+//				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//					if(isChecked) {
+//						item.setIsChosen(true);
+//						storeId = item.getStoreID();
+//						for(Store store : stores) {
+//							if(store.getStoreID() != item.getStoreID()) {
+//								store.setIsChosen(false);
+//							}
+//						}
+//						notifyDataSetChanged();
+//					} 
+//					
+//				}
+//			});
 			
 			convertView.setTag(holder);
 			
@@ -87,9 +88,9 @@ public class StoresAdapter extends BaseAdapter {
 //		}
 
 		
-		holder.storeName.setText(item.getStoreName());
+		holder.storeName.setText(item.getName());
 		
-		if(item.getStoreID() == storeId) {
+		if(item.getId() == storeId) {
 			holder.radioButton.setChecked(true);
 		} else {
 			holder.radioButton.setChecked(false);
@@ -98,7 +99,7 @@ public class StoresAdapter extends BaseAdapter {
 		return convertView;
 	}
 	
-	public List<Store> getData() {
-		return stores;
+	public List<StoreType> getData() {
+		return storeRetails;
 	}
 }

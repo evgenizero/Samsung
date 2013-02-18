@@ -36,14 +36,23 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_STORE_NAME = "store_name";
 	public static final String COLUMN_HALL_ID = "hall_id";
 
+	public static final String TABLE_STORE_RETAILS = "store_retails";
+	public static final String COLUMN_STORE_RETAIL_ID = "retail_id";
+
 	private static final String DATABASE_NAME = "samsung_app.db";
 	private static final int DATABASE_VERSION = 2;
+
+	private static final String CREATE_TABLE_STORE_RETAILS = "create table "
+			+ TABLE_STORE_RETAILS + "(" + COLUMN_ID
+			+ " integer primary key autoincrement, " + COLUMN_STORE_RETAIL_ID
+			+ " integer not null, " + COLUMN_NAME + " text);";
 
 	private static final String CREATE_TABLE_STORES = "create table "
 			+ TABLE_STORES + "(" + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_STORE_ID
 			+ " integer not null, " + COLUMN_STORE_NAME + " text, "
-			+ COLUMN_HALL_ID + " integer);";
+			+ COLUMN_HALL_ID + " integer, " + COLUMN_STORE_RETAIL_ID
+			+ " integer not null);";
 
 	private static final String CREATE_TABLE_SERIE_PRODUCT = "create table "
 			+ TABLE_PRODUCT_SERIE + "(" + COLUMN_ID
@@ -88,6 +97,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		db.execSQL(CREATE_TABLE_STORE_RETAILS);
 		db.execSQL(CREATE_TABLE_STORES);
 		db.execSQL(CREATE_TABLE_PRODUCTS);
 		db.execSQL(CREATE_TABLE_CATEGORIES);
@@ -102,6 +112,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		Log.w(MySQLiteOpenHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_STORE_RETAILS);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_STORES);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);

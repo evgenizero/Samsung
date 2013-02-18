@@ -6,6 +6,8 @@ import java.util.List;
 import org.w3c.dom.Document;
 
 import bg.tarasoft.smartsales.bean.Store;
+import bg.tarasoft.smartsales.bean.StoreType;
+import bg.tarasoft.smartsales.database.StoreRetailDataSource;
 import bg.tarasoft.smartsales.database.StoresDataSource;
 import bg.tarasoft.smartsales.parser.ParseXml;
 
@@ -13,25 +15,21 @@ import android.content.Context;
 
 public class GetStoresRequest extends SamsungGetRequest{
 
-	private List<Store> stores;
-	private StoresDataSource dataSource;
+	private List<StoreType> storesRetails;
+	private StoreRetailDataSource dataSource;
 	
 	public GetStoresRequest(Context context) {
 		super(context, null, "http://system.smartsales.bg/android_html/xml_files/xml_stores.xml");
-		dataSource = new StoresDataSource(context);
+		dataSource = new StoreRetailDataSource(context);
 		dataSource.open();
-		stores = new ArrayList<Store>();
+		storesRetails = new ArrayList<StoreType>();
 	}
 	
 	@Override
 	protected void processStream(Document doc) {
-		ParseXml.parseStores(doc, stores, context);
+		ParseXml.parseStores(doc, storesRetails, context);
 		
-		for(Store store : stores) {
-			System.out.println("NAME: " + store.getStoreName() + "   ID: " +  store.getStoreID());
-		}
-		
-		dataSource.insertStores(stores);
+		dataSource.insertStoreRetails(storesRetails);
 		dataSource.close();
 	}
 

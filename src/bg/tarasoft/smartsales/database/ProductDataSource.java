@@ -40,30 +40,38 @@ public class ProductDataSource {
 	public HashMap<Integer, Integer> getNumberOfProducts(
 			List<Category> categories) {
 		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-		StringBuilder query = new StringBuilder();
-		for (int i = 0; i < categories.size() - 1; i++) {
-			query.append(String.valueOf(categories.get(i).getId()) + ",");
-		}
-		query.append(String.valueOf(categories.get(categories.size() - 1)
-				.getId()));
-		Cursor cursor = database.rawQuery(
-				"select category_id, count(*) from products where category_id in ("
-						+ query.toString() + ") group by category_id;", null);
+		try {
+			StringBuilder query = new StringBuilder();
+			for (int i = 0; i < categories.size() - 1; i++) {
+				query.append(String.valueOf(categories.get(i).getId()) + ",");
+			}
+			if(categories.size() != 0) {
+				query.append(String.valueOf(categories.get(categories.size() - 1)
+						.getId()));
+			}
+			Cursor cursor = database.rawQuery(
+					"select category_id, count(*) from products where category_id in ("
+							+ query.toString() + ") group by category_id;",
+					null);
 
-		System.out
-				.println(":ALFHL:ADFHJADFH:A:DFHAL:HDF:  "
-						+ "select category_id, count(*) from products where category_id in ("
-						+ query.toString() + ") group by category_id;");
+			System.out
+					.println(":ALFHL:ADFHJADFH:A:DFHAL:HDF:  "
+							+ "select category_id, count(*) from products where category_id in ("
+							+ query.toString() + ") group by category_id;");
 
-		System.out.println("SIZE: " + cursor.getCount());
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			System.out.println("IN IN IN IN IN ");
-			map.put(cursor.getInt(0), cursor.getInt(1));
-			cursor.moveToNext();
+			System.out.println("SIZE: " + cursor.getCount());
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				System.out.println("IN IN IN IN IN ");
+				map.put(cursor.getInt(0), cursor.getInt(1));
+				cursor.moveToNext();
+			}
+			cursor.close();
+			System.out.println("QUERYYYY:   " + map);
+
+		} catch (ArrayIndexOutOfBoundsException exception) {
+			exception.printStackTrace();
 		}
-		cursor.close();
-		System.out.println("QUERYYYY:   " + map);
 		return map;
 	}
 
