@@ -5,13 +5,19 @@ import bg.tarasoft.smartsales.requests.LoginRequest;
 import bg.tarasoft.smartsales.samsung.R;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class LoginActivity extends Activity {
 
 	private EditText email, password;
+	private CheckBox checkBoxLogin;
+	
+	private SharedPreferences preferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +26,13 @@ public class LoginActivity extends Activity {
 
 		email = (EditText) findViewById(R.id.email);
 		password = (EditText) findViewById(R.id.password);
-
+		checkBoxLogin = (CheckBox) findViewById(R.id.checkBoxLogin);
+		
+		preferences = getSharedPreferences("settings", 0);
+		
+		if(preferences.getBoolean("remember", false)) {
+			processRequest();
+		}
 	}
 
 	public void onLoginClick(View v) {
@@ -38,7 +50,15 @@ public class LoginActivity extends Activity {
 	}
 
 	public void processRequest() {
+		SharedPreferences.Editor edit = preferences.edit();
+		if(checkBoxLogin.isChecked()) {
+			edit.putBoolean("remember", true);
+		} 
+		edit.apply();
+		
 		Intent intent = new Intent(this, SubCategoriesActivity.class);
+		//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
+		finish();
 	}
 }

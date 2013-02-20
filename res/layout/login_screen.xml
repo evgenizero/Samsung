@@ -99,12 +99,21 @@
                 android:onClick="onCancelClick"
                 android:text="Cancel" />
         </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkBoxLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Запомни"
+            android:textColor="@android:color/black" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="0.8" >
     </LinearLayout>
 
 </LinearLayout>

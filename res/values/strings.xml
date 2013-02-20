@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">SmartSales</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">Log out</string>
     <string name="title_activity_main_categories">@string/app_name</string>
     <string name="depleted">Изчерпан</string>
     <string name="posledni_broiki">Последни бройки</string>

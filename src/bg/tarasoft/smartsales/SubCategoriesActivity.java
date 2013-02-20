@@ -33,8 +33,12 @@ import bg.tarasoft.smartsales.views.MenuButton;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
@@ -92,85 +96,82 @@ public class SubCategoriesActivity extends Activity {
 
 		if (extras != null) {
 
-			// because clear_history doesn't pop it from the stack
-			if (extras.getBoolean("shouldFinish")) {
-				System.out.println("GONNA FINISH");
-				finish();
-			}
-			String categoryName = extras.getString("categoryName");
-			id = 0;
-			Object o = extras.get("parentId");
-			if (o != null) {
-				id = (Integer) o;
-				logType = LoggedActivity.CATEGORY;
-				currentCategory = id;
-			}
-			Object master = extras.get("masterParentId");
-			if (master != null) {
-				currentCategory = (Integer) master;
-			}
-			if (!extras.getBoolean("noSeries")) {
-				System.out.println();
-				logType = LoggedActivity.CATEGORY;
-				id = extras.getInt("categoryId");
-				/*
-				 * headerLabel2.setVisibility(View.VISIBLE);
-				 * headerLabel2.setText(extras.getString("subCatName"));
-				 * headerLabel.setOnClickListener(new OnClickListener() {
-				 * 
-				 * public void onClick(View v) {
-				 * Utilities.returnToFirst(mContext, headerLabel, true); } });
-				 */
-				System.out.println("SETTING FIRST ADAPTER");
-				gridView.setAdapter(new SeriesAdapter(this, seriesDataSource
-						.getSeries(id), R.layout.grid_item));
-
-				gridView.setOnItemClickListener(new OnSerieClickListener(this,
-						categoryName, (ArrayList<Category>) extras
-								.get("headerBar")));
-
+			if (extras.getBoolean("update")) {
+				update();
 			} else {
-				logType = LoggedActivity.CATEGORY;
-				System.out.println("CATEGORIES FOR "
-						+ extras.getInt("categoryId") + ":");
-				for (Category c : dataSource.getCategories(extras
-						.getInt("categoryId"))) {
-					System.out.println(c.getName());
+
+				if (extras.getBoolean("shouldFinish")) {
+					System.out.println("GONNA FINISH");
+					finish();
 				}
 
-				List<Category> cats = dataSource.getCategories(id);
+				String categoryName = extras.getString("categoryName");
+				id = 0;
+				Object o = extras.get("parentId");
+				if (o != null) {
+					id = (Integer) o;
+					logType = LoggedActivity.CATEGORY;
+					currentCategory = id;
+				}
+				Object master = extras.get("masterParentId");
+				if (master != null) {
+					currentCategory = (Integer) master;
+				}
+				if (!extras.getBoolean("noSeries")) {
+					System.out.println();
+					logType = LoggedActivity.CATEGORY;
+					id = extras.getInt("categoryId");
 
-				gridView.setAdapter(new CategoryAdapter(this, cats,
-						R.layout.grid_item, productsDataSource
-								.getNumberOfProducts(cats)));
+					System.out.println("SETTING FIRST ADAPTER");
+					gridView.setAdapter(new SeriesAdapter(this,
+							seriesDataSource.getSeries(id), R.layout.grid_item));
 
-				gridView.setOnItemClickListener(new OnSubCategoryClickListener(
-						this, categoryName, seriesDataSource,
-						(ArrayList<Category>) extras.get("headerBar"),
-						currentCategory));
+					gridView.setOnItemClickListener(new OnSerieClickListener(
+							this, categoryName, (ArrayList<Category>) extras
+									.get("headerBar")));
 
-			}
-			Utilities.addToLog(getApplicationContext(), id, logType);
-			List<Category> categories = dataSource.getCategories(0);
-
-			if (currentCategory == null) {
-				currentCategory = id;
-			}
-
-			for (Category c : categories) {
-				if (c.getId() == currentCategory) {
-					buttonsContainer.addView(new MenuButton(mContext, c,
-							headerBar, true));
 				} else {
-					buttonsContainer.addView(new MenuButton(mContext, c,
-							headerBar));
-				}
-			}
+					logType = LoggedActivity.CATEGORY;
+					System.out.println("CATEGORIES FOR "
+							+ extras.getInt("categoryId") + ":");
+					for (Category c : dataSource.getCategories(extras
+							.getInt("categoryId"))) {
+						System.out.println(c.getName());
+					}
 
+					List<Category> cats = dataSource.getCategories(id);
+
+					gridView.setAdapter(new CategoryAdapter(this, cats,
+							R.layout.grid_item, productsDataSource
+									.getNumberOfProducts(cats)));
+
+					gridView.setOnItemClickListener(new OnSubCategoryClickListener(
+							this, categoryName, seriesDataSource,
+							(ArrayList<Category>) extras.get("headerBar"),
+							currentCategory));
+
+				}
+				Utilities.addToLog(getApplicationContext(), id, logType);
+				List<Category> categories = dataSource.getCategories(0);
+
+				if (currentCategory == null) {
+					currentCategory = id;
+				}
+
+				for (Category c : categories) {
+					if (c.getId() == currentCategory) {
+						buttonsContainer.addView(new MenuButton(mContext, c,
+								headerBar, true));
+					} else {
+						buttonsContainer.addView(new MenuButton(mContext, c,
+								headerBar));
+					}
+				}
+
+			}
 		} else {
 
 			System.out.println("EXTRAS ARE NULL");
-			// new shit
 
 			if (dataSource.isEmpty() && !Utilities.isOnline(this)) {
 				AssetManager assets = getAssets();
@@ -187,22 +188,8 @@ public class SubCategoriesActivity extends Activity {
 					e.printStackTrace();
 				}
 			} else {
-				new SendLocationLogRequest(this);
-				new GetChecksumRequest(this, "common_files");
-				new GetChecksumRequest(this, "xml_categories");
-				SamsungRequests.getExecutor().execute();
+				update();
 			}
-
-			/*
-			 * List<Category> categories = dataSource.getCategories(0);
-			 * firstCategory = categories.get(0); gridView.setAdapter(new
-			 * CategoryAdapter(this, dataSource
-			 * .getCategories(firstCategory.getId()), R.layout.grid_item));
-			 * 
-			 * gridView.setOnItemClickListener(new OnSubCategoryClickListener(
-			 * this, firstCategory.getName(), seriesDataSource, new
-			 * ArrayList<Category>()));
-			 */
 		}
 
 		if (extras != null) {
@@ -217,11 +204,16 @@ public class SubCategoriesActivity extends Activity {
 
 		}
 
-		// headerBar.setCategories(categoriesForBar);
-
 		dataSource.close();
 		seriesDataSource.close();
 		productsDataSource.close();
+	}
+
+	private void update() {
+		new SendLocationLogRequest(this);
+		new GetChecksumRequest(this, "common_files");
+		new GetChecksumRequest(this, "xml_categories");
+		SamsungRequests.getExecutor().execute();
 	}
 
 	public void processData() {
@@ -229,35 +221,46 @@ public class SubCategoriesActivity extends Activity {
 	}
 
 	private void loadView() {
-		List<Category> categories = dataSource.getCategories(0);
-		if (categories.size() != 0) {
-			firstCategory = categories.get(0);
-			// System.out.println();
-
+		if(reloadBottomButtons()) {
 			List<Category> cats = dataSource.getCategories(firstCategory
 					.getId());
 			gridView.setAdapter(new CategoryAdapter(this, cats,
 					R.layout.grid_item, productsDataSource
 							.getNumberOfProducts(cats)));
-			if (currentCategory == null) {
-				if (categories.size() != 0) {
-					currentCategory = categories.get(0).getId();
-				}
-			}
 			gridView.setOnItemClickListener(new OnSubCategoryClickListener(
 					this, firstCategory.getName(), seriesDataSource,
 					new ArrayList<Category>(), currentCategory));
-
-			for (Category c : categories) {
-				if (c.getId() == currentCategory) {
-					buttonsContainer.addView(new MenuButton(mContext, c,
-							headerBar, true));
-				} else {
-					buttonsContainer.addView(new MenuButton(mContext, c,
-							headerBar));
-				}
-			}
+			
 		}
+//		List<Category> categories = dataSource.getCategories(0);
+//		if (categories.size() != 0) {
+//			firstCategory = categories.get(0);
+//			// System.out.println();
+//
+//			List<Category> cats = dataSource.getCategories(firstCategory
+//					.getId());
+//			gridView.setAdapter(new CategoryAdapter(this, cats,
+//					R.layout.grid_item, productsDataSource
+//							.getNumberOfProducts(cats)));
+//			if (currentCategory == null) {
+//				if (categories.size() != 0) {
+//					currentCategory = categories.get(0).getId();
+//				}
+//			}
+//			gridView.setOnItemClickListener(new OnSubCategoryClickListener(
+//					this, firstCategory.getName(), seriesDataSource,
+//					new ArrayList<Category>(), currentCategory));
+//
+//			for (Category c : categories) {
+//				if (c.getId() == currentCategory) {
+//					buttonsContainer.addView(new MenuButton(mContext, c,
+//							headerBar, true));
+//				} else {
+//					buttonsContainer.addView(new MenuButton(mContext, c,
+//							headerBar));
+//				}
+//			}
+//		}
 	}
 
 	@Override
@@ -275,6 +278,10 @@ public class SubCategoriesActivity extends Activity {
 		seriesDataSource.open();
 		productsDataSource.open();
 
+		reloadBottomButtons();
+	}
+
+	private boolean reloadBottomButtons() {
 		List<Category> categories = dataSource.getCategories(0);
 		if (categories.size() != 0) {
 			if (firstCategory == null) {
@@ -295,14 +302,33 @@ public class SubCategoriesActivity extends Activity {
 							headerBar));
 				}
 			}
+			return true;
 		}
-
+		return false;
 	}
 
-	// public void onSmartSalesClick(View v) {
-	// Intent intent = new Intent(this, MainCategories.class);
-	// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	// startActivity(intent);
-	// }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_main_categories, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_settings:
+			SharedPreferences preferences = getSharedPreferences("settings", 0);
+			SharedPreferences.Editor edit = preferences.edit();
+			edit.putBoolean("remember", false);
+			edit.apply();
+
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 }
