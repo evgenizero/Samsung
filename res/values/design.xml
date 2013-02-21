@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <string name="background">@drawable/main_back</string>
+
     <dimen name="bar_height">50dp</dimen>
     <dimen name="product_label_height">30dp</dimen>
     <dimen name="margin_small">5dp</dimen>
@@ -14,12 +15,19 @@
     <dimen name="category_image_width">110dp</dimen>
     <dimen name="category_image_height">90dp</dimen>
     <dimen name="bottom_bar_cell_width">100dp</dimen>
+    <dimen name="refresh_text_size">10sp</dimen>
+    <dimen name="refresh_margin_left">5dp</dimen>
+    <dimen name="product_new_text_height">20dp</dimen>
 
     <integer name="columns">2</integer>
     <integer name="sub_cat_columns">2</integer>
 
     <item name="category_text_weight" format="float" type="dimen">3</item>
     <item name="header_pholder_weight" format="float" type="dimen">0</item>
+    <item name="bottom_headers_weight" format="float" type="dimen">1</item>
+    <item name="header_bar_left_weight" format="float" type="dimen">7</item>
+    <item name="refresh_weight" format="float" type="dimen">0.6</item>
+    <item name="product_new_check_weight" format="float" type="dimen">0.7</item>
 
     <color name="text_color">#ff0000ff</color>
 

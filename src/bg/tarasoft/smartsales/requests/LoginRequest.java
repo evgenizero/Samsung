@@ -88,9 +88,10 @@ public class LoginRequest extends AsyncTask<LoginData, Void, String> {
 
 		if (!"invalid_email".equals(result) && !"invalid_pass".equals(result)) {
 			((LoginActivity) context).processRequest();
-		} else {
-			Toast.makeText(context, String.valueOf(result), Toast.LENGTH_SHORT)
-					.show();
+		} else if("invalid_email".equals(result)) {
+			Toast.makeText(context, "Невалиден email", Toast.LENGTH_SHORT).show();
+		} else if("invalid_pass".equals(result)) {
+			Toast.makeText(context, "Грешна парола", Toast.LENGTH_SHORT).show();
 		}
 		cancelDialog();
 	}

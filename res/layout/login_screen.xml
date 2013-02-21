@@ -13,23 +13,63 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_weight="1"
         android:orientation="vertical" >
 
-        <bg.tarasoft.smartsales.views.HeaderBar
-            android:id="@+id/header_bar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/bar_height" >
-        </bg.tarasoft.smartsales.views.HeaderBar>
+            android:layout_height="@dimen/bar_height"
+            android:background="@drawable/head_back" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7" >
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/logo_top" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SmartSales"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="МОБИЛЕН КАТАЛОГ"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.9" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
 
             <TextView
                 android:id="@+id/textView1"
@@ -38,8 +78,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Email:"
-                android:textColor="@android:color/black"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/email"
@@ -55,8 +95,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" >
+            android:layout_height="wrap_content" >
 
             <TextView
                 android:id="@+id/textView2"
@@ -65,8 +104,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Password:"
-                android:textColor="@android:color/black"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
 
             <EditText
                 android:id="@+id/password"
@@ -79,8 +118,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center" >
 
             <Button
@@ -107,7 +145,6 @@
             android:layout_gravity="right"
             android:text="Запомни"
             android:textColor="@android:color/black" />
-
     </LinearLayout>
 
     <LinearLayout

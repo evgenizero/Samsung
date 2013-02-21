@@ -8,14 +8,14 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="7" >
+        android:layout_weight="@dimen/header_bar_left_weight" >
 
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/logo_top" />
 
         <LinearLayout

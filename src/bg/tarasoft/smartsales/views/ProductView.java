@@ -38,7 +38,7 @@ public class ProductView extends LinearLayout implements OnClickListener{
 	private ImageView image;
 	private View view;
 	private TextView text;
-	private TextView label;
+	//private TextView label;
 	private Context mContext;
 	private static final String BASE_DL_URL = "http://system.smartsales.bg/android_html/zip_files/";
 	
@@ -49,8 +49,8 @@ public class ProductView extends LinearLayout implements OnClickListener{
 		this.mContext = context;
 		text = (TextView)view.findViewById(R.id.text);
 		image = (ImageView) view.findViewById(R.id.image);
-		label = (TextView) view.findViewById(R.id.product_label);
-		text.setTextColor(Color.WHITE);
+		//label = (TextView) view.findViewById(R.id.product_label);
+		//text.setTextColor(Color.WHITE);
 		this.setOnClickListener(this);
 		
 	}
@@ -62,25 +62,25 @@ public class ProductView extends LinearLayout implements OnClickListener{
 		switch(product.getLabel()){
 		
 		case Product.LABEL_NONE:
-			label.setVisibility(View.INVISIBLE);
+			//label.setVisibility(View.INVISIBLE);
 			break;
 		case Product.LABEL_LAST:
-			label.setVisibility(View.VISIBLE);
-			label.setText(R.string.posledni_broiki);
-			label.setBackgroundColor(Color.RED);
+//			label.setVisibility(View.VISIBLE);
+//			label.setText(R.string.posledni_broiki);
+//			label.setBackgroundColor(Color.RED);
 			break;
 		
 		case Product.LABEL_NEW:
-			label.setVisibility(View.VISIBLE);
-			
-			label.setText(R.string.new_product);
-			label.setBackgroundColor(Color.BLUE);
+//			label.setVisibility(View.VISIBLE);
+//			
+//			label.setText(R.string.new_product);
+//			label.setBackgroundColor(Color.BLUE);
 			Log.d("kjk", "Setting to new");
 			break;
 		case Product.LABEL_PROMO:
-			label.setVisibility(View.VISIBLE);
-			label.setText(R.string.promo);
-			label.setBackgroundColor(Color.YELLOW);
+//			label.setVisibility(View.VISIBLE);
+//			label.setText(R.string.promo);
+//			label.setBackgroundColor(Color.YELLOW);
 			break;
 		}
 		String url = product.getImageUrl();
@@ -101,7 +101,7 @@ public class ProductView extends LinearLayout implements OnClickListener{
 	private void inflateView(final Context context) {
 		LayoutInflater layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = layoutInflater.inflate(R.layout.single_product, this);
+		view = layoutInflater.inflate(R.layout.product_new_view, this);
 	}
 
 	
