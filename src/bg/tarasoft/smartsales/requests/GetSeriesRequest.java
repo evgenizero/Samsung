@@ -30,7 +30,7 @@ public class GetSeriesRequest extends SamsungGetRequest {
 				context,
 				"Getting series",
 				"http://system.smartsales.bg/product/android_request_info/?request_type=xml_series&answer_type=download");
-	
+
 		dataSource = new SeriesDataSource(context);
 		dataSource.open();
 		

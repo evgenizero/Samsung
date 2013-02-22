@@ -22,6 +22,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_PIC = "pic";
 	public static final String COLUMN_STATUS = "status";
 	public static final String COLUMN_IS_SHOWN = "is_shown";
+	public static final String COLUMN_PRODUCT_PRICE = "price";
 
 	public static final String COLUMN_PARENT_CATEGORY_ID = "category_id";
 	public static final String COLUMN_CHECKSUM = "checksum";
@@ -78,7 +79,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 			+ " integer primary key autoincrement, " + COLUMN_CATEGORY_ID
 			+ " integer not null, " + COLUMN_NAME + " text not null, "
 			+ COLUMN_PARENT_CATEGORY_ID + " integer not null, " + COLUMN_PIC
-			+ " text not null, " + COLUMN_STATUS + " integer not null);";
+			+ " text not null, " + COLUMN_STATUS + " integer not null, "
+			+ COLUMN_PRODUCT_PRICE + " integer not null);";
 
 	private static final String CREATE_TABLE_CHECKSUMS = "create table "
 			+ TABLE_CHECKSUMS + "(" + COLUMN_ID

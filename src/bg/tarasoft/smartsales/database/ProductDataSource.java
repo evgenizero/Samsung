@@ -23,7 +23,8 @@ public class ProductDataSource {
 			MySQLiteOpenHelper.COLUMN_CATEGORY_ID,
 			MySQLiteOpenHelper.COLUMN_NAME,
 			MySQLiteOpenHelper.COLUMN_PARENT_CATEGORY_ID,
-			MySQLiteOpenHelper.COLUMN_PIC, MySQLiteOpenHelper.COLUMN_STATUS };
+			MySQLiteOpenHelper.COLUMN_PIC, MySQLiteOpenHelper.COLUMN_STATUS,
+			MySQLiteOpenHelper.COLUMN_PRODUCT_PRICE };
 
 	public ProductDataSource(Context context) {
 		dbHelper = new MySQLiteOpenHelper(context);
@@ -45,9 +46,9 @@ public class ProductDataSource {
 			for (int i = 0; i < categories.size() - 1; i++) {
 				query.append(String.valueOf(categories.get(i).getId()) + ",");
 			}
-			if(categories.size() != 0) {
-				query.append(String.valueOf(categories.get(categories.size() - 1)
-						.getId()));
+			if (categories.size() != 0) {
+				query.append(String.valueOf(categories.get(
+						categories.size() - 1).getId()));
 			}
 			Cursor cursor = database.rawQuery(
 					"select category_id, count(*) from products where category_id in ("
@@ -97,6 +98,8 @@ public class ProductDataSource {
 					product.getCategoryId());
 			values.put(MySQLiteOpenHelper.COLUMN_PIC, product.getImageUrl());
 			values.put(MySQLiteOpenHelper.COLUMN_STATUS, product.getLabel());
+			values.put(MySQLiteOpenHelper.COLUMN_PRODUCT_PRICE,
+					product.getPrice());
 			database.insert(MySQLiteOpenHelper.TABLE_PRODUCTS, null, values);
 
 			System.out.println("INSERTED");
@@ -188,6 +191,7 @@ public class ProductDataSource {
 		product.setCategoryId(cursor.getInt(3));
 		product.setImageUrl(cursor.getString(4));
 		product.setLabel(cursor.getInt(5));
+		product.setPrice(cursor.getInt(6));
 		return product;
 	}
 }

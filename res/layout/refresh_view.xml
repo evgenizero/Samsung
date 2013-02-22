@@ -11,14 +11,33 @@
         android:scaleType="fitXY"
         android:src="@drawable/separator_head" />
 
-    <ImageView
-        android:id="@+id/imageView3"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/refresh_margin_left"
         android:layout_weight="@dimen/refresh_weight"
-        android:src="@drawable/refresh1" />
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:src="@drawable/refresh1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView3"
@@ -26,9 +45,9 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:gravity="center"
-        android:textSize="@dimen/refresh_text_size"
-        android:textStyle="bold"
+        android:text="Опресни продуктите"
         android:textColor="@android:color/white"
-        android:text="Опресни продуктите" />
+        android:textSize="@dimen/refresh_text_size"
+        android:textStyle="bold" />
 
 </LinearLayout>

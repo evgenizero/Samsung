@@ -4,18 +4,35 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/product_item_height"
-        android:background="@drawable/prod_shape2" >
+        android:background="@drawable/prod_shape2"
+        android:layout_height="@dimen/product_item_height" >
 
         <bg.tarasoft.smartsales.views.ResizableImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
+            android:layout_height="@dimen/product_item_height"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
             android:src="@drawable/no_photo" />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/product_label"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/product_label_height"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/margin_big"
+            android:layout_marginRight="@dimen/margin_small"
+            android:background="@android:color/darker_gray"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_small"
+            android:paddingRight="@dimen/margin_small"
+            android:scaleType="fitXY"
+            android:text="Izcherpan"
+            android:textColor="#000000" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/text"
@@ -29,7 +46,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="38dp" >
+        android:layout_height="25dp" >
 
         <LinearLayout
             android:layout_width="0dp"
@@ -71,7 +88,7 @@
                     android:textSize="@dimen/grid_item_text_size" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

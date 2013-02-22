@@ -6,6 +6,7 @@ public class Product {
 	private String imageUrl;
 	private int categoryId;
 	private int label;
+	private int price;
 	public static final int LABEL_NONE = 0;
 	public static final int LABEL_NEW = 1;
 	public static final int LABEL_LAST = 2;
@@ -62,5 +63,13 @@ public class Product {
 
 	public void setLabel(int label) {
 		this.label = label;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
 	}
 }

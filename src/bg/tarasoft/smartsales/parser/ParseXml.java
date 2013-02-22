@@ -35,6 +35,7 @@ public class ParseXml {
 	private static final String STORE = "store";
 	private static final String STORE_CONTR = "retail_contr";
 	private static final String STORE_NUMBER = "store_number";
+	private static final String PRODUCT_PRICE = "price";
 
 	private static String ITEM = "item";
 
@@ -163,6 +164,8 @@ public class ParseXml {
 							firstPersonElement, ID)));
 					product.setCategoryId(Integer.valueOf(getElementByName(
 							firstPersonElement, CATEGORY_ID)));
+					product.setPrice(Integer.valueOf(getElementByName(
+							firstPersonElement, PRODUCT_PRICE)));
 					product.setName(getElementByName(firstPersonElement, NAME));
 					product.setImageUrl(getElementByName(firstPersonElement,
 							PIC));
@@ -291,9 +294,9 @@ public class ParseXml {
 									store.setStoreName(String
 											.valueOf(getElementByName(
 													storeElement, NAME)));
-//									store.setHallId(Integer
-//											.valueOf(getElementByName(
-//													storeElement, STORE_NUMBER)));
+									// store.setHallId(Integer
+									// .valueOf(getElementByName(
+									// storeElement, STORE_NUMBER)));
 
 									storeList.add(store);
 								}
@@ -304,7 +307,7 @@ public class ParseXml {
 				}
 				storeRetails.add(storeRetail);
 			}
-			for(StoreType el : storeRetails) {
+			for (StoreType el : storeRetails) {
 				System.out.println("RETAIL: " + el.getName());
 			}
 		} catch (Exception e) {
