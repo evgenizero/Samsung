@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:layout_weight="1"
- 
+    android:layout_height="match_parent"
     android:orientation="horizontal" >
 
     <TextView
-        android:id="@+id/h_label"
+        android:id="@+id/h_label_type"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_small"
         android:clickable="true"
+        android:drawableLeft="@drawable/path_arrow"
+        android:drawablePadding="3dp"
         android:ellipsize="end"
-        android:gravity="center"
+        android:gravity="center|left"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/h_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:gravity="center|left"
+        android:paddingTop="@dimen/margin_small"
         android:text="h_label"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/grid_item_text_size" />
+        android:textSize="11sp" />
 
 </LinearLayout>
