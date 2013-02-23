@@ -56,36 +56,36 @@ public class ProductsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// Keep screen on
 		getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
-				
-		
 
 		dataSource = new ProductDataSource(this);
 		dataSource.open();
 		mContext = this;
 		headerBar = (HeaderBar) findViewById(R.id.header_bar);
 		updateText = (TextView) findViewById(R.id.update_all_text);
-		
+		categoriesForBar = Utilities.getHistory(this);
+
 		SharedPreferences preferences = getSharedPreferences("settings", 0);
-		if(preferences.getInt("updateAll", 0) == 0) {
+		if (preferences.getInt("updateAll", 0) == 0) {
 			updateText.setVisibility(View.GONE);
 		}
-		
+
 		updateText.setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View v) {
-				if(products.size() != 0) {
-					ArrayList<ProductsGroup> categoriesForBar = ((ProductsActivity) mContext).getHeaderBar();
-					Toast.makeText(mContext, "Updating all", Toast.LENGTH_SHORT).show();
-					new GetChecksumRequest(mContext, products, categoriesForBar);
+				if (products.size() != 0) {
+					
+					Toast.makeText(mContext, "Updating all", Toast.LENGTH_SHORT)
+							.show();
+					new GetChecksumRequest(mContext, products);
 					SamsungRequests.getExecutor().execute();
 				}
-	
+
 			}
 		});
-		
+
 		// pgv = (ProductGridView) findViewById(R.id.productsGrid);
 
 		gridView = (GridView) findViewById(R.id.productsGrid);
@@ -97,7 +97,7 @@ public class ProductsActivity extends Activity {
 			if (o != null) {
 				categoryId = (Integer) o;
 				logType = LoggedActivity.CATEGORY;
-				
+
 				products = dataSource.getProducts(categoryId);
 				gridView.setAdapter(new ProductAdapterNew(this, products));
 			} else {
@@ -110,14 +110,10 @@ public class ProductsActivity extends Activity {
 
 			}
 			// ADD ACTIVITY TO LOG
-			Utilities.addToLog(getApplicationContext(), categoryId,logType);
-			
-			
-			
+			Utilities.addToLog(getApplicationContext(), categoryId, logType);
+
 			SeriesDataSource sDS = new SeriesDataSource(mContext);
 			sDS.open();
-			categoriesForBar = (ArrayList<ProductsGroup>) extras
-					.get("headerBar");
 			System.out.println("RETRIEVING SERIE WITH ID: "
 					+ extras.getInt("serieId"));
 			Serie serie = sDS.getSerie(extras.getInt("serieId"));
@@ -128,7 +124,7 @@ public class ProductsActivity extends Activity {
 					categoriesForBar.add(serie);
 				}
 			}
-			headerBar.setCategories(categoriesForBar);
+			Utilities.addHistoryToBar(this, headerBar);
 			dataSource.close();
 		}
 	}
@@ -146,13 +142,15 @@ public class ProductsActivity extends Activity {
 		dataSource.open();
 	}
 
-	public ArrayList<ProductsGroup> getHeaderBar() {
-		return (ArrayList<ProductsGroup>) extras.get("headerBar");
-	}
-
 	@Override
 	protected void onPause() {
 		super.onPause();
 		dataSource.close();
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		Utilities.performBack(this);
 	}
 }

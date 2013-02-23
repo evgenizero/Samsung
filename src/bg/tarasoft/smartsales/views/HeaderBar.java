@@ -30,6 +30,8 @@ public class HeaderBar extends LinearLayout implements OnClickListener {
 	public HeaderBar(final Context context, AttributeSet attrs) {
 		super(context, attrs);
 		inflateView(context);
+		labelsContainer = (LinearLayout) view
+				.findViewById(R.id.labels_container);
 		mContext = context;
 	}
 
@@ -37,7 +39,6 @@ public class HeaderBar extends LinearLayout implements OnClickListener {
 		// / labels.add(label);
 
 		labelsContainer.addView(label);
-		label.setCategoriesForBar(getLabelsCategories());
 		System.out.println("ADDING TO CONTAINER: "
 				+ label.getCategory().getName());
 
@@ -45,7 +46,6 @@ public class HeaderBar extends LinearLayout implements OnClickListener {
 
 	public void addLabeltList(HeaderLabel label) {
 		labels.add(label);
-		label.setCategoriesForBar(getLabelsCategories());
 
 	}
 
@@ -70,6 +70,17 @@ public class HeaderBar extends LinearLayout implements OnClickListener {
 	}
 
 	public void setCategories(ArrayList<ProductsGroup> categoriesForBar) {
+		if (categoriesForBar.size() >= 1) {
+
+			for (ProductsGroup p : categoriesForBar) {
+				HeaderLabel headerLabel = new HeaderLabel(mContext, p);
+				//TextView textView = new TextView(mContext);
+				
+			//	textView.setText(p.);
+				labelsContainer.addView(headerLabel);
+			}
+		}
+
 	}
 
 }

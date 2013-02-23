@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
  
@@ -8,14 +8,15 @@
 
     <TextView
         android:id="@+id/h_label"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_small"
+        android:background="@drawable/bottom_buttons"
         android:clickable="true"
         android:ellipsize="end"
         android:gravity="center"
         android:text="h_label"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/grid_item_text_size" />
 
 </LinearLayout>

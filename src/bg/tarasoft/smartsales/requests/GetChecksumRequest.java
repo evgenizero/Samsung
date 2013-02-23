@@ -43,7 +43,6 @@ public class GetChecksumRequest extends SamsungGetRequest {
 	private String type;
 
 	private String dialogMessage;
-	private ArrayList<ProductsGroup> categoriesForBar;
 	private boolean toOpen;
 	private boolean areMultipleProducts = false;
 	private List<Product> products;
@@ -70,15 +69,13 @@ public class GetChecksumRequest extends SamsungGetRequest {
 		}
 	}
 
-	public GetChecksumRequest(Context context, int productId,
-			ArrayList<ProductsGroup> categoriesForBar, boolean toOpen) {
+	public GetChecksumRequest(Context context, int productId, boolean toOpen) {
 		super(
 				context,
 				null,
 				"http://system.smartsales.bg/product/android_request_info/?request_type=product&answer_type=checksum&id="
 						+ productId);
 		this.toOpen = toOpen;
-		this.categoriesForBar = categoriesForBar;
 		this.dialogMessage = "Checking for updates";
 
 		dataSource = new ChecksumDataSource(context);
@@ -88,7 +85,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 		if (!Utilities.isOnline(context)) {
 			if (Utilities.productExistOnSdCard(productId) && toOpen) {
 
-				Utilities.openProduct(context, productId, categoriesForBar);
+				Utilities.openProduct(context, productId);
 			} else {
 				Toast toast = Toast.makeText(context, "Not downloaded",
 						Toast.LENGTH_SHORT);
@@ -99,8 +96,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 		}
 	}
 
-	public GetChecksumRequest(Context context, List<Product> products,
-			ArrayList<ProductsGroup> categoriesForBar) {
+	public GetChecksumRequest(Context context, List<Product> products) {
 		super(
 				context,
 				null,
@@ -111,7 +107,6 @@ public class GetChecksumRequest extends SamsungGetRequest {
 		this.products = Utilities.cloneList(products);
 		this.products.remove(0);
 		this.mContext = context;
-		this.categoriesForBar = categoriesForBar;
 		this.dialogMessage = "Checking for updates";
 		this.areMultipleProducts = true;
 		dataSource = new ChecksumDataSource(context);
@@ -121,7 +116,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 		if (!Utilities.isOnline(context)) {
 			if (Utilities.productExistOnSdCard(productId) && toOpen) {
 
-				Utilities.openProduct(context, productId, categoriesForBar);
+				Utilities.openProduct(context, productId);
 			} else {
 				Toast toast = Toast.makeText(context, "Not downloaded",
 						Toast.LENGTH_SHORT);
@@ -145,7 +140,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		
+
 		if (!error) {
 			Checksum oldChecksum = dataSource.getChecksum(type);
 
@@ -165,8 +160,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 					if (type.matches(".*\\d.*") && toOpen) {
 						// is a product
 
-						Utilities.openProduct(context, Integer.parseInt(type),
-								categoriesForBar);
+						Utilities.openProduct(context, Integer.parseInt(type));
 
 					}
 				} else {
@@ -180,11 +174,11 @@ public class GetChecksumRequest extends SamsungGetRequest {
 				toast.show();
 
 			}
-			
+
 			Log.d("TROLL", "DOWNLOADING HTML IS " + downloadingHTML);
 			if (!downloadingHTML && areMultipleProducts && products.size() > 0) {
 				Log.d("TROLL", "GET CHECKSUM REQ " + downloadingHTML);
-				new GetChecksumRequest(mContext, products, categoriesForBar);
+				new GetChecksumRequest(mContext, products);
 				SamsungRequests.getExecutor().execute();
 			}
 
@@ -205,18 +199,18 @@ public class GetChecksumRequest extends SamsungGetRequest {
 			executor.execute();
 		} else {
 			// is a product
-			downloadingHTML  = true;
+			downloadingHTML = true;
 			Log.d("TROLL", "DOWNLOADINGHTML SET TO " + downloadingHTML);
 			if (areMultipleProducts && products.size() > 0) {
-				
-				new GetProductHTML(Integer.parseInt(type), context,
-						categoriesForBar, toOpen, products)
+
+				new GetProductHTML(Integer.parseInt(type), context, toOpen,
+						products)
 						.execute("http://system.smartsales.bg/product/android_request_info/?request_type=product&answer_type=download&id="
 								+ type);
 
 			} else {
-				new GetProductHTML(Integer.parseInt(type), context,
-						categoriesForBar, toOpen, null)
+				new GetProductHTML(Integer.parseInt(type), context, toOpen,
+						null)
 						.execute("http://system.smartsales.bg/product/android_request_info/?request_type=product&answer_type=download&id="
 								+ type);
 			}

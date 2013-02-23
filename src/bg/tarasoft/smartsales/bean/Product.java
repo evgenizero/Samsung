@@ -1,6 +1,6 @@
 package bg.tarasoft.smartsales.bean;
 
-public class Product {
+public class Product implements ProductsGroup{
 	private int id;
 	private String name;
 	private String imageUrl;

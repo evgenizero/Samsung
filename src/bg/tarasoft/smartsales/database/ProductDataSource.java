@@ -167,6 +167,21 @@ public class ProductDataSource {
 		return products;
 	}
 
+	public Product getProduct(int productId) {
+
+		Cursor cursor = database.query(MySQLiteOpenHelper.TABLE_PRODUCTS,
+				allColumns,
+				MySQLiteOpenHelper.COLUMN_ID + "=" + String.valueOf(productId),
+				null, null, null, null);
+
+		cursor.moveToFirst();
+		if (cursor.getCount() > 0) {
+			return cursorToProduct(cursor);
+		} else {
+			return null;
+		}
+	}
+
 	public List<Product> getProducts() {
 		List<Product> products = new ArrayList<Product>();
 

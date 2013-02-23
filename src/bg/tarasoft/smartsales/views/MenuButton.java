@@ -2,6 +2,7 @@ package bg.tarasoft.smartsales.views;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,13 +13,13 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import bg.tarasoft.smartsales.SubCategoriesActivity;
-import bg.tarasoft.smartsales.SubSubCategoriesActivity;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.bean.Serie;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
 import bg.tarasoft.smartsales.samsung.R;
+import bg.tarasoft.smartsales.utilities.Utilities;
 
 public class MenuButton extends LinearLayout implements OnClickListener {
 
@@ -59,7 +60,7 @@ public class MenuButton extends LinearLayout implements OnClickListener {
 	private void inflateView(final Context context) {
 		LayoutInflater layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = layoutInflater.inflate(R.layout.header_label, this);
+		view = layoutInflater.inflate(R.layout.bottom_menu_button, this);
 		// TODO VVV tva e zashtoto neshto ne se zimat parametrite ot XML - da se
 		// opravi
 		float width = getResources()
@@ -72,9 +73,12 @@ public class MenuButton extends LinearLayout implements OnClickListener {
 		Intent intent = new Intent(mContext, SubCategoriesActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra("parentId", category.getId());
-		intent.putExtra("categoryName", category.getName());
+	//	intent.putExtra("categoryName", category.getName());
 		intent.putExtra("noSeries", true);
-		intent.putExtra("headerBar", headerBar.getLabelsCategories());
+		ArrayList<ProductsGroup> history = Utilities.getHistory((Activity)mContext);
+		history.clear();
+		history.add(category);
+//		intent.putExtra("headerBar", headerBar.getLabelsCategories());
 		// intent.putExtra("addToBar", true);
 		mContext.startActivity(intent);
 	}

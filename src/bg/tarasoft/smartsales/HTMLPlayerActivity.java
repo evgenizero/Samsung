@@ -1,6 +1,7 @@
 package bg.tarasoft.smartsales;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,8 +20,10 @@ import android.widget.TextView;
 import bg.tarasoft.smartsales.adapters.ProductAdapterNew;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.LoggedActivity;
+import bg.tarasoft.smartsales.bean.Product;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
+import bg.tarasoft.smartsales.database.ProductDataSource;
 import bg.tarasoft.smartsales.samsung.R;
 import bg.tarasoft.smartsales.utilities.Utilities;
 import bg.tarasoft.smartsales.views.HeaderBar;
@@ -58,30 +61,37 @@ public class HTMLPlayerActivity extends Activity {
 
 		final Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			int categoryId = 0;
-			Object o = extras.get("categoryId");
-			if (o != null) {
-				categoryId = (Integer) o;
+//			int categoryId = 0;
+//			Object o = extras.get("categoryId");
+//			if (o != null) {
+//				categoryId = (Integer) o;
+//
+//			} else {
+//				categoryId = extras.getInt("serieId");
+//
+//			}
 
-			} else {
-				categoryId = extras.getInt("serieId");
+			int productId = extras.getInt("productId");
 
-			}
-
-			int value = extras.getInt("productId");
-
-			categoriesForBar = (ArrayList<ProductsGroup>) extras
-					.get("headerBar");
+		//	categoriesForBar = (ArrayList<ProductsGroup>) extras
+		//			.get("headerBar");
 			// categoriesForBar.add(dataSource.getCategory(id));
 
-			System.out
-					.println("CATEGORIES FOR BAR: " + categoriesForBar.size());
-			for (ProductsGroup c : categoriesForBar) {
-				//System.out.println(c.getName());
+			ProductDataSource ds = new ProductDataSource(this);
+			ds.open();
+			System.out.println("PRODUCTIDDDD ____ " + productId);
+			//Product product = ds.getProduct(productId);
+			List<Product> products = ds.getProducts();
+			Product product = null;
+			for(Product p: products){
+				if(p.getId() == productId){
+					product = p;
+				}
 			}
-			headerBar.setCategories(categoriesForBar);
-			loadProduct(value);
-			Utilities.addToLog(getApplicationContext(), value, LoggedActivity.PRODUCT);
+			Utilities.addToHistoryPath(mContext, product);
+			Utilities.addHistoryToBar(this, headerBar);
+			loadProduct(productId);
+			Utilities.addToLog(getApplicationContext(), productId, LoggedActivity.PRODUCT);
 			
 		}
 	}
@@ -97,5 +107,10 @@ public class HTMLPlayerActivity extends Activity {
 		Intent intent = new Intent(this, MainCategories.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
+	}
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		Utilities.performBack(this);
 	}
 }

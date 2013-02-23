@@ -114,8 +114,7 @@ public class ProductView extends LinearLayout implements OnClickListener{
 	
 
 	public void onClick(View v) {
-		ArrayList<ProductsGroup> categoriesForBar = ((ProductsActivity) mContext).getHeaderBar();
-		new GetChecksumRequest(mContext, product.getId(),categoriesForBar,true);
+		new GetChecksumRequest(mContext, product.getId(),true);
 		SamsungRequests.getExecutor().execute();
 		
 	}

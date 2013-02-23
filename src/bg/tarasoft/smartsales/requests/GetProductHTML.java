@@ -45,19 +45,16 @@ public class GetProductHTML extends AsyncTask<String, String, String> {
 	private int productId;
 	private Context context;
 	private String filePath;
-	private ArrayList<ProductsGroup> categoriesForBar;
 	private boolean toOpen;
 	private Context mContext;
 	private List<Product> products;
 
-	public GetProductHTML(int productId, Context context,
-			ArrayList<ProductsGroup> categoriesForBar, boolean toOpen, List<Product> products) {
+	public GetProductHTML(int productId, Context context, boolean toOpen, List<Product> products) {
 		this.toOpen = toOpen;
 		this.products = products;
 		this.mContext = context;
 		progress = new ProgressDialog(context);
 		this.context = context;
-		this.categoriesForBar = categoriesForBar;
 		this.productId = productId;
 		filePath = Environment.getExternalStorageDirectory() + "/"
 				+ BASE_FOLDER + "/" + productId + ".zip";
@@ -167,11 +164,11 @@ public class GetProductHTML extends AsyncTask<String, String, String> {
 		progress.dismiss();
 		
 		if (toOpen) {
-			Utilities.openProduct(context, productId, categoriesForBar);
+			Utilities.openProduct(context, productId);
 		} else if(products != null && products.size()>0) {
 			Log.d("TROLL","NEXT PRODUCT DL");
 			
-			new GetChecksumRequest(mContext, products, categoriesForBar);
+			new GetChecksumRequest(mContext, products);
 			SamsungRequests.getExecutor().execute();
 			
 			

@@ -57,13 +57,13 @@ public class SubCategoriesActivity extends Activity {
 	private ProductDataSource productsDataSource;
 	private Context mContext;
 	private HeaderBar headerBar;
-	private ArrayList<ProductsGroup> categoriesForBar;
 	private int id;
 	private int logType;
 	private Category firstCategory;
 	private LinearLayout buttonsContainer;
 	private Integer currentCategory;
 	private Button settingsButton;
+	private ArrayList<ProductsGroup> categoriesForBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,7 @@ public class SubCategoriesActivity extends Activity {
 		productsDataSource.open();
 
 		headerBar = (HeaderBar) findViewById(R.id.header_bar);
+
 		buttonsContainer = (LinearLayout) findViewById(R.id.buttons_container);
 		settingsButton = (Button) findViewById(R.id.settingsButton);
 		settingsButton.setOnTouchListener(new OnSettingsButtonClick(this));
@@ -100,19 +101,13 @@ public class SubCategoriesActivity extends Activity {
 				update();
 			} else {
 
-				if (extras.getBoolean("shouldFinish")) {
-					System.out.println("GONNA FINISH");
-					finish();
-				}
-
 				String categoryName = extras.getString("categoryName");
-				id = 0;
-				Object o = extras.get("parentId");
-				if (o != null) {
-					id = (Integer) o;
-					logType = LoggedActivity.CATEGORY;
-					currentCategory = id;
-				}
+				// id = 0;
+				int id = extras.getInt("parentId");
+				logType = LoggedActivity.CATEGORY;
+				currentCategory = id;
+
+				//
 				Object master = extras.get("masterParentId");
 				if (master != null) {
 					currentCategory = (Integer) master;
@@ -147,7 +142,6 @@ public class SubCategoriesActivity extends Activity {
 
 					gridView.setOnItemClickListener(new OnSubCategoryClickListener(
 							this, categoryName, seriesDataSource,
-							(ArrayList<Category>) extras.get("headerBar"),
 							currentCategory));
 
 				}
@@ -169,6 +163,8 @@ public class SubCategoriesActivity extends Activity {
 				}
 
 			}
+			Utilities.addHistoryToBar(this, headerBar);
+
 		} else {
 
 			System.out.println("EXTRAS ARE NULL");
@@ -183,27 +179,30 @@ public class SubCategoriesActivity extends Activity {
 					new GetProductsRequest(this, in2);
 					new GetSeriesRequest(this, in3);
 					SamsungRequests.getExecutor().execute();
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else {
 				update();
+				reloadBottomButtons();
+				Utilities.getHistory(mContext).clear();
+				Utilities.addToHistoryPath(this, firstCategory);
+				Utilities.addHistoryToBar(this, headerBar);
+
 			}
 		}
-
-		if (extras != null) {
-			categoriesForBar = (ArrayList<ProductsGroup>) extras
-					.get("headerBar");
-			if (extras.getBoolean("addToBar")) {
-				categoriesForBar.add(dataSource.getCategory(id));
-			}
-		} else {
-			categoriesForBar = new ArrayList<ProductsGroup>();
-			categoriesForBar.add(firstCategory);
-
-		}
-
+		/*
+		 * if (extras != null) { categoriesForBar = (ArrayList<ProductsGroup>)
+		 * extras .get("headerBar"); if (extras.getBoolean("addToBar")) {
+		 * categoriesForBar.add(dataSource.getCategory(id)); } } else { Category
+		 * cat = new Category(); reloadBottomButtons(); firstCategory.getId();
+		 * Utilities.addToHistoryPath(this, firstCategory);
+		 * Utilities.addHistoryToBar(this, headerBar);
+		 * 
+		 * }
+		 */
 		dataSource.close();
 		seriesDataSource.close();
 		productsDataSource.close();
@@ -221,7 +220,7 @@ public class SubCategoriesActivity extends Activity {
 	}
 
 	private void loadView() {
-		if(reloadBottomButtons()) {
+		if (reloadBottomButtons()) {
 			List<Category> cats = dataSource.getCategories(firstCategory
 					.getId());
 			gridView.setAdapter(new CategoryAdapter(this, cats,
@@ -229,38 +228,38 @@ public class SubCategoriesActivity extends Activity {
 							.getNumberOfProducts(cats)));
 			gridView.setOnItemClickListener(new OnSubCategoryClickListener(
 					this, firstCategory.getName(), seriesDataSource,
-					new ArrayList<Category>(), currentCategory));
-			
+					currentCategory));
+
 		}
-//		List<Category> categories = dataSource.getCategories(0);
-//		if (categories.size() != 0) {
-//			firstCategory = categories.get(0);
-//			// System.out.println();
-//
-//			List<Category> cats = dataSource.getCategories(firstCategory
-//					.getId());
-//			gridView.setAdapter(new CategoryAdapter(this, cats,
-//					R.layout.grid_item, productsDataSource
-//							.getNumberOfProducts(cats)));
-//			if (currentCategory == null) {
-//				if (categories.size() != 0) {
-//					currentCategory = categories.get(0).getId();
-//				}
-//			}
-//			gridView.setOnItemClickListener(new OnSubCategoryClickListener(
-//					this, firstCategory.getName(), seriesDataSource,
-//					new ArrayList<Category>(), currentCategory));
-//
-//			for (Category c : categories) {
-//				if (c.getId() == currentCategory) {
-//					buttonsContainer.addView(new MenuButton(mContext, c,
-//							headerBar, true));
-//				} else {
-//					buttonsContainer.addView(new MenuButton(mContext, c,
-//							headerBar));
-//				}
-//			}
-//		}
+		// List<Category> categories = dataSource.getCategories(0);
+		// if (categories.size() != 0) {
+		// firstCategory = categories.get(0);
+		// // System.out.println();
+		//
+		// List<Category> cats = dataSource.getCategories(firstCategory
+		// .getId());
+		// gridView.setAdapter(new CategoryAdapter(this, cats,
+		// R.layout.grid_item, productsDataSource
+		// .getNumberOfProducts(cats)));
+		// if (currentCategory == null) {
+		// if (categories.size() != 0) {
+		// currentCategory = categories.get(0).getId();
+		// }
+		// }
+		// gridView.setOnItemClickListener(new OnSubCategoryClickListener(
+		// this, firstCategory.getName(), seriesDataSource,
+		// new ArrayList<Category>(), currentCategory));
+		//
+		// for (Category c : categories) {
+		// if (c.getId() == currentCategory) {
+		// buttonsContainer.addView(new MenuButton(mContext, c,
+		// headerBar, true));
+		// } else {
+		// buttonsContainer.addView(new MenuButton(mContext, c,
+		// headerBar));
+		// }
+		// }
+		// }
 	}
 
 	@Override
@@ -331,4 +330,12 @@ public class SubCategoriesActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		if(!Utilities.performBack(this)){
+			super.onBackPressed();
+			Utilities.getHistory(mContext).clear();
+		}
+	}
 }
