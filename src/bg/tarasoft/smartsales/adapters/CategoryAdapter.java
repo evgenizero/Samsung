@@ -8,11 +8,13 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
 
+import bg.tarasoft.smartsales.MyApplication;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.cache.Cache;
 import bg.tarasoft.smartsales.listeners.OnCategoryListItemClickListener;
 import bg.tarasoft.smartsales.requests.DownloadImagesTask;
 import bg.tarasoft.smartsales.samsung.R;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -118,13 +120,14 @@ public class CategoryAdapter extends BaseAdapter {
 		String url = item.getImageUrl();
 
 		if (url != null) {
-			Bitmap bm = Cache.getCacheFile(url);
-			if (bm == null) {
-				holder.image.setTag(url);
-				new DownloadImagesTask().execute(holder.image);
-			} else {
-				holder.image.setImageBitmap(bm);
-			}
+			downloadImage(url, holder.image);
+//			Bitmap bm = Cache.getCacheFile(url);
+//			if (bm == null) {
+//				holder.image.setTag(url);
+//				new DownloadImagesTask().execute(holder.image);
+//			} else {
+//				holder.image.setImageBitmap(bm);
+//			}
 		} else {
 			holder.image.setImageResource(R.drawable.no_photo);
 			holder.image.setTag("true");
@@ -145,4 +148,11 @@ public class CategoryAdapter extends BaseAdapter {
 		convertView.requestLayout();
 		return convertView;
 	}
+	
+	private void downloadImage(String url, ImageView image) {
+		MyApplication app = ((MyApplication) ((Activity) context)
+				.getApplication());
+		app.getLoader().displayImage(url, image);
+	}
+
 }
