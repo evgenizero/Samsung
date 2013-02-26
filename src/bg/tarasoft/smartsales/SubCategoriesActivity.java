@@ -90,7 +90,15 @@ public class SubCategoriesActivity extends Activity {
 		buttonsContainer = (LinearLayout) findViewById(R.id.buttons_container);
 		settingsButton = (Button) findViewById(R.id.settingsButton);
 		settingsButton.setOnTouchListener(new OnSettingsButtonClick(this));
-
+//		settingsButton.setOnClickListener(new OnClickListener() {
+//			
+//			public void onClick(View v) {
+//				Intent intent = new Intent(mContext, bg.tarasoft.smartsales.EnterPassword.class);
+//				mContext.startActivity(intent);
+//			}
+//		});
+		
+		
 		mContext = this;
 
 		final Bundle extras = getIntent().getExtras();

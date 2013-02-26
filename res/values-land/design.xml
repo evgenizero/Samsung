@@ -5,6 +5,8 @@
 
     <integer name="columns">3</integer>
 
-    <item name="bottom_headers_weight" format="float" type="dimen">1.7</item>
+    <item name="bottom_headers_weight" format="float" type="dimen">2.2</item>
+    <item name="header_bar_weight" format="float" type="dimen">0.8</item>
+    <dimen name="bottom_offset">-5dp</dimen>
 
 </resources>

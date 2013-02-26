@@ -24,7 +24,7 @@ public class CacheStore {
 	private HashMap<String, Bitmap> bitmapMap;
 	private static final String cacheDir = "/Android/data/bg.tarasoft.samsung_app/cache/";
 	private static final String CACHE_FILENAME = ".cache";
-	private static final int MAX_CACHE_SIZE = 10485760;
+	private static final int MAX_CACHE_SIZE = 15728640;
 
 	@SuppressWarnings("unchecked")
 	private CacheStore() {
@@ -64,6 +64,10 @@ public class CacheStore {
 		File fullCacheDir = new File(Environment.getExternalStorageDirectory()
 				.toString(), cacheDir);
 		fullCacheDir.mkdirs();
+		createNoMedia(fullCacheDir);
+	}
+
+	private void createNoMedia(File fullCacheDir) {
 		File noMedia = new File(fullCacheDir.toString(), ".nomedia");
 		try {
 			noMedia.createNewFile();

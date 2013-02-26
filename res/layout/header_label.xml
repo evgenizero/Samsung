@@ -17,8 +17,8 @@
         android:ellipsize="end"
         android:gravity="center|left"
         android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="11sp" />
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/label_text_size_type" />
 
     <TextView
         android:id="@+id/h_label_text"
@@ -29,7 +29,7 @@
         android:gravity="center|left"
         android:paddingTop="@dimen/margin_small"
         android:text="h_label"
-        android:textColor="@android:color/black"
-        android:textSize="11sp" />
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/label_text_size_value" />
 
 </LinearLayout>

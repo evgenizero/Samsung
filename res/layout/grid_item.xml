@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="8"
-            android:background="@drawable/prod_left_part"
+            android:background="@drawable/prod_left_ico"
             android:gravity="center"
             android:text="SHalalalalalssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
             android:textColor="@color/text_color"

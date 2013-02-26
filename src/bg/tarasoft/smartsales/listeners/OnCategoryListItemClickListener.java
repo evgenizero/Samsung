@@ -28,8 +28,11 @@ public class OnCategoryListItemClickListener implements OnItemClickListener {
 		intent.putExtra("categoryName", category.getName());
 		intent.putExtra("noSeries", true);
 		intent.putExtra("addToBar", true);
-		System.out.println("SIZE BEFORE SEND"
-				+ headerBar.getLabelsCategories().size());
+//		System.out.println("SIZE BEFORE SEND"
+//				+ headerBar.getLabelsCategories().size());
+//		
+		
+		//TODO
 		intent.putExtra("headerBar", headerBar.getLabelsCategories());
 		context.startActivity(intent);
 

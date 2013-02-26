@@ -39,18 +39,20 @@ public class HeaderLabel extends LinearLayout implements OnClickListener {
 
 		if (productsGroup instanceof Category) {
 			if (Utilities.getHistory(mContext).indexOf(productsGroup) == 0) {
-				type.setText("Категория");
+				type.setText("РљР°С‚РµРіРѕСЂРёСЏ");
 				// da nqma strelkichka
 				type.setCompoundDrawables(null, null, null, null);
 			} else {
-				type.setText("Подкатегория");
+				type.setText("РџРѕРґРєР°С‚РµРіРѕСЂРёСЏ");
 			}
 
 		} else if (productsGroup instanceof Serie) {
-			type.setText("Серия");
+			type.setText("РЎРµСЂРёСЏ");
 		}
 
-		label.setText(productsGroup.getName());
+		if(productsGroup != null) {
+			label.setText(productsGroup.getName());
+		}
 		// view.setOnClickListener(this);
 		label.setOnClickListener(this);
 		type.setOnClickListener(this);

@@ -32,12 +32,15 @@ public class OnSettingsButtonClick implements OnTouchListener {
 			if ((end - start) > 4) {
 				// Toast.makeText(context, "blob", Toast.LENGTH_SHORT).show();
 
+				end = 0;
+				
 				Intent intent = new Intent(context,
 						bg.tarasoft.smartsales.EnterPassword.class);
 				context.startActivity(intent);
 
+			} else {
+				requestsHandler.postDelayed(requestTask, 1000);
 			}
-			requestsHandler.postDelayed(requestTask, 1000);
 		}
 	};
 

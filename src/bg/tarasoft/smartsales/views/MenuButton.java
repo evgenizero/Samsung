@@ -50,7 +50,7 @@ public class MenuButton extends LinearLayout implements OnClickListener {
 		this.category = c;
 		mContext = context;
 		label = (TextView) view.findViewById(R.id.h_label);
-		label.setBackgroundColor(getResources().getColor(android.R.color.white));
+		label.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_back));
 		label.setTextColor(getResources().getColor(R.color.text_color));
 		label.setText(category.getName());
 		label.setOnClickListener(this);

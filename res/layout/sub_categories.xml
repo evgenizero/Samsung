@@ -13,14 +13,14 @@
         <bg.tarasoft.smartsales.views.HeaderBar
             android:id="@+id/header_bar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/bar_height" >
+            android:layout_height="wrap_content" >
         </bg.tarasoft.smartsales.views.HeaderBar>
 
         <Button
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/bar_height"
-            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:background="@android:color/transparent"
             android:text="Button"
             android:textColor="@android:color/transparent"
@@ -36,6 +36,7 @@
         android:horizontalSpacing="10dp"
         android:numColumns="@integer/sub_cat_columns"
         android:stretchMode="columnWidth"
+        android:background="@drawable/main_back"
         android:verticalSpacing="25dp" />
 
     <HorizontalScrollView
@@ -45,6 +46,7 @@
         android:layout_weight="@dimen/bottom_headers_weight" >
 
         <LinearLayout
+            android:layout_marginTop="@dimen/bottom_offset"
             android:id="@+id/buttons_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

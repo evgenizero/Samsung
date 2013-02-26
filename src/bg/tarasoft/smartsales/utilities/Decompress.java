@@ -6,6 +6,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -26,7 +27,7 @@ public class Decompress {
 			ZipInputStream zipStream = new ZipInputStream(fin);
 			ZipEntry ze = null;
 			while ((ze = zipStream.getNextEntry()) != null) {
-				Log.v("Decompress", "Unzipping " +extractedDir+ ze.getName());
+				Log.v("Decompress", "Unzipping " + extractedDir + ze.getName());
 
 				if (ze.isDirectory()) {
 					dirChecker(ze.getName());
@@ -35,8 +36,8 @@ public class Decompress {
 					int size;
 					byte[] buffer = new byte[2048];
 
-					FileOutputStream outStream = new FileOutputStream(extractedDir
-							+ ze.getName());
+					FileOutputStream outStream = new FileOutputStream(
+							extractedDir + ze.getName());
 					BufferedOutputStream bufferOut = new BufferedOutputStream(
 							outStream, buffer.length);
 
@@ -57,11 +58,22 @@ public class Decompress {
 
 	}
 
+	private void createNoMedia(File fullCacheDir) {
+		File noMedia = new File(fullCacheDir.toString(), ".nomedia");
+		try {
+			noMedia.createNewFile();
+			Log.i("CACHE", "Cache created");
+		} catch (IOException e) {
+			Log.i("CACHE", "Couldn't create .nomedia file");
+			e.printStackTrace();
+		}
+	}
+
 	private void dirChecker(String dir) {
 		File f = new File(extractedDir + dir);
-
 		if (!f.isDirectory()) {
 			f.mkdirs();
+			createNoMedia(f);
 		}
 	}
 }

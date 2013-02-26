@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <dimen name="bar_height">60dp</dimen>
     <dimen name="margin_small">10dp</dimen>
@@ -15,6 +15,10 @@
     <dimen name="refresh_text_size">14sp</dimen>
     <dimen name="refresh_margin_left">15dp</dimen>
     <dimen name="product_new_text_height">30dp</dimen>
+    <dimen name="label_text_size_type">13sp</dimen>
+    <dimen name="label_text_size_value">15sp</dimen>
+    <dimen name="header_bar_height">50dp</dimen>
+    <dimen name="bottom_offset">-15dp</dimen>
 
     <integer name="columns">2</integer>
 
@@ -22,6 +26,7 @@
     <item name="bottom_headers_weight" format="float" type="dimen">0.7</item>
     <item name="header_bar_left_weight" format="float" type="dimen">10</item>
     <item name="refresh_weight" format="float" type="dimen">0.5</item>
+    <item name="header_bar_weight" format="float" type="dimen">0.8</item>
     <item name="product_new_check_weight" format="float" type="dimen">0.4</item>
 
 </resources>

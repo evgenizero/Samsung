@@ -9,9 +9,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/head_back" >
+        android:layout_height="@dimen/header_bar_height"
+        android:background="@drawable/header_background" >
 
         <LinearLayout
             android:layout_width="0dp"
@@ -39,15 +38,16 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-2dp"
                     android:text="SmartSales"
                     android:textColor="#FFFFFFFF"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp"
                     android:text="МОБИЛЕН КАТАЛОГ"
                     android:textColor="#FFFFFFFF"
                     android:textSize="11sp" />
@@ -61,18 +61,11 @@
         </bg.tarasoft.smartsales.views.RefreshView>
     </LinearLayout>
 
-    <android.support.v7.widget.GridLayout
+    <LinearLayout
         android:id="@+id/labels_container"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:columnCount="3"
-        android:clickable="true"
-        app:rowCount="2" >
-       
-    </android.support.v7.widget.GridLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
 
-    
 </LinearLayout>

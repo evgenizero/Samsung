@@ -41,7 +41,7 @@ public class DownloadImagesTask extends AsyncTask<ImageView, Void, Bitmap> {
 		try {
 			in = OpenHttpConnection(url);
 			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 8;
+			options.inSampleSize = 16;
 			bitmap = BitmapFactory.decodeStream(in, null, options);
 			in.close();
 		} catch (Exception e) {

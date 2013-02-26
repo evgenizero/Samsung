@@ -9,7 +9,7 @@
     <bg.tarasoft.smartsales.views.HeaderBar
         android:id="@+id/header_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bar_height" >
+        android:layout_height="wrap_content" >
     </bg.tarasoft.smartsales.views.HeaderBar>
 
     <WebView
