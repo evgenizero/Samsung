@@ -14,6 +14,7 @@ import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
 import bg.tarasoft.smartsales.database.ProductDataSource;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
+import bg.tarasoft.smartsales.listeners.OnAccountButtonClick;
 import bg.tarasoft.smartsales.listeners.OnCategoryListItemClickListener;
 import bg.tarasoft.smartsales.listeners.OnSerieClickListener;
 import bg.tarasoft.smartsales.listeners.OnSettingsButtonClick;
@@ -35,16 +36,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,10 +72,14 @@ public class SubCategoriesActivity extends Activity {
 	private Integer currentCategory;
 	private Button settingsButton;
 	private ArrayList<ProductsGroup> categoriesForBar;
-
+	private HorizontalScrollView scrollView;
+	private TextView accountManage;
+	private SharedPreferences settings;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.sub_categories);
 
 		// Keep screen on
@@ -86,24 +98,35 @@ public class SubCategoriesActivity extends Activity {
 		productsDataSource.open();
 
 		headerBar = (HeaderBar) findViewById(R.id.header_bar);
-
+		scrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView1);
+		accountManage = (TextView) findViewById(R.id.account_button);
+		accountManage.setOnClickListener(new OnAccountButtonClick(this));
+		
 		buttonsContainer = (LinearLayout) findViewById(R.id.buttons_container);
 		settingsButton = (Button) findViewById(R.id.settingsButton);
 		settingsButton.setOnTouchListener(new OnSettingsButtonClick(this));
-//		settingsButton.setOnClickListener(new OnClickListener() {
-//			
-//			public void onClick(View v) {
-//				Intent intent = new Intent(mContext, bg.tarasoft.smartsales.EnterPassword.class);
-//				mContext.startActivity(intent);
-//			}
-//		});
-		
-		
+		// settingsButton.setOnClickListener(new OnClickListener() {
+		//
+		// public void onClick(View v) {
+		// Intent intent = new Intent(mContext,
+		// bg.tarasoft.smartsales.EnterPassword.class);
+		// mContext.startActivity(intent);
+		// }
+		// });
+
 		mContext = this;
 
+		setAccountInfo();
+		
 		final Bundle extras = getIntent().getExtras();
 
 		if (extras != null) {
+
+			int scrollPosition = extras.getInt("scrollPosition");
+
+			System.out.println("SCROLLLL POSITION: " + scrollPosition);
+
+			scrollView.scrollTo(scrollPosition, 0);
 
 			if (extras.getBoolean("update")) {
 				update();
@@ -214,6 +237,15 @@ public class SubCategoriesActivity extends Activity {
 		dataSource.close();
 		seriesDataSource.close();
 		productsDataSource.close();
+	}
+
+	private void setAccountInfo() {
+		settings = getSharedPreferences("settings", 0);
+		if(settings.getBoolean("guest", true)) {
+			accountManage.setText("Влизане");
+		} else {
+			accountManage.setText("Излизане");
+		}
 	}
 
 	private void update() {
@@ -341,7 +373,7 @@ public class SubCategoriesActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		if(!Utilities.performBack(this)){
+		if (!Utilities.performBack(this)) {
 			super.onBackPressed();
 			Utilities.getHistory(mContext).clear();
 		}

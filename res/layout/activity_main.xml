@@ -40,6 +40,13 @@
             android:text="Update all"
             android:textColor="@color/text_color"
             android:textSize="@dimen/grid_item_text_size" />
+
+        <bg.tarasoft.smartsales.views.CompareView
+            android:id="@+id/compare_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </bg.tarasoft.smartsales.views.CompareView>
+        
     </LinearLayout>
 
 </LinearLayout>

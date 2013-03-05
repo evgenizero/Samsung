@@ -1,5 +1,10 @@
 package bg.tarasoft.smartsales.views;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
@@ -13,6 +18,7 @@ import bg.tarasoft.smartsales.requests.DownloadImagesTask;
 import bg.tarasoft.smartsales.requests.GetCategoriesRequest;
 import bg.tarasoft.smartsales.requests.GetChecksumRequest;
 import bg.tarasoft.smartsales.requests.GetProductHTML;
+import bg.tarasoft.smartsales.requests.ImageDownloader;
 import bg.tarasoft.smartsales.requests.SamsungRequests;
 import bg.tarasoft.smartsales.samsung.R;
 
@@ -20,6 +26,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -29,6 +36,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,7 +52,11 @@ public class ProductView extends LinearLayout implements OnClickListener {
 	private TextView label;
 	private Context mContext;
 	private TextView price;
+	private CheckBox checkBox;
 	private static final String BASE_DL_URL = "http://system.smartsales.bg/android_html/zip_files/";
+
+	private ImageDownloader imageDownloader = new ImageDownloader();
+	private Context context;
 
 	public ProductView(final Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -52,8 +66,28 @@ public class ProductView extends LinearLayout implements OnClickListener {
 		image = (ImageView) view.findViewById(R.id.image);
 		label = (TextView) view.findViewById(R.id.product_label);
 		price = (TextView) view.findViewById(R.id.price_text);
+		checkBox = (CheckBox) view.findViewById(R.id.checkBox1);
 		// text.setTextColor(Color.WHITE);
 		this.setOnClickListener(this);
+
+		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				product.setToCompare(isChecked);
+				if(isChecked) {
+					((ProductsActivity)context).checksNum++;
+				} else {
+					((ProductsActivity)context).checksNum--;
+				}
+				if(((ProductsActivity)context).checksNum  == 2) {
+					((ProductsActivity)context).setCompareButtonVisibility(View.VISIBLE);
+				} else if(((ProductsActivity)context).checksNum < 2) {
+					((ProductsActivity)context).setCompareButtonVisibility(View.GONE);
+
+				}
+			}
+		});
 
 	}
 
@@ -92,17 +126,14 @@ public class ProductView extends LinearLayout implements OnClickListener {
 		}
 		String url = product.getImageUrl();
 		if (url != null) {
-			downloadImage(url, image);
-
-			// Bitmap bm = Cache.getCacheFile(url);
-			// if (bm == null) {
-			// image.setTag(url);
-			//
-			// // TODO
-			// // new DownloadImagesTask().execute(image);
-			// } else {
-			// image.setImageBitmap(bm);
-			// }
+			Bitmap bm = Cache.getCacheFile(url);
+			if (bm == null) {
+				image.setTag(url);
+				new ImageDownloader().downloadImage(image);
+				// new DownloadImagesTask().execute(image);
+			} else {
+				image.setImageBitmap(bm);
+			}
 		} else {
 			image.setTag("true");
 
@@ -115,15 +146,13 @@ public class ProductView extends LinearLayout implements OnClickListener {
 		view = layoutInflater.inflate(R.layout.product_new_view, this);
 	}
 
-	private void downloadImage(String url, ImageView image) {
-		MyApplication app = ((MyApplication) ((Activity) mContext)
-				.getApplication());
-		app.getLoader().displayImage(url, image);
-	}
-
 	public void onClick(View v) {
 		new GetChecksumRequest(mContext, product.getId(), true);
 		SamsungRequests.getExecutor().execute();
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 }

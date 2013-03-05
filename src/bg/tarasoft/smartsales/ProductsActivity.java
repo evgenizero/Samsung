@@ -51,6 +51,11 @@ public class ProductsActivity extends Activity {
 	private TextView updateText;
 
 	private int logType;
+	
+	private ProductAdapterNew adapter;
+	private View compareButton;
+	
+	public Integer checksNum = new Integer(0);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,8 @@ public class ProductsActivity extends Activity {
 		mContext = this;
 		headerBar = (HeaderBar) findViewById(R.id.header_bar);
 		updateText = (TextView) findViewById(R.id.update_all_text);
+		compareButton = findViewById(R.id.compare_button);
+		compareButton.setVisibility(View.GONE);
 		categoriesForBar = Utilities.getHistory(this);
 
 		SharedPreferences preferences = getSharedPreferences("settings", 0);
@@ -99,11 +106,13 @@ public class ProductsActivity extends Activity {
 				logType = LoggedActivity.CATEGORY;
 
 				products = dataSource.getProducts(categoryId);
-				gridView.setAdapter(new ProductAdapterNew(this, products));
+				adapter = new ProductAdapterNew(this, products);
+				gridView.setAdapter(adapter);
 			} else {
 				categoryId = extras.getInt("serieId");
 				products = dataSource.getProductsBySerie(categoryId);
-				gridView.setAdapter(new ProductAdapterNew(this, products));
+				adapter = new ProductAdapterNew(this, products);
+				gridView.setAdapter(adapter);
 				logType = LoggedActivity.SERIE;
 				System.out.println("ELEMENTS: "
 						+ dataSource.getProductsBySerie(categoryId));
@@ -152,5 +161,13 @@ public class ProductsActivity extends Activity {
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		Utilities.performBack(this);
+	}
+	
+	public List<Integer> getCompareIds() {
+		return adapter == null ? null : adapter.getSelectedIds();
+	}
+	
+	public void setCompareButtonVisibility(int visibility) {
+		compareButton.setVisibility(visibility);
 	}
 }

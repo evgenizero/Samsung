@@ -7,9 +7,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.StreamCorruptedException;
+import java.lang.ref.SoftReference;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
@@ -21,15 +24,16 @@ import android.util.Log;
 public class CacheStore {
 	private static CacheStore INSTANCE = null;
 	private HashMap<String, String> cacheMap;
-	private HashMap<String, Bitmap> bitmapMap;
+	private HashMap<String, SoftReference<Bitmap>> bitmapMap;
 	private static final String cacheDir = "/Android/data/bg.tarasoft.samsung_app/cache/";
 	private static final String CACHE_FILENAME = ".cache";
-	private static final int MAX_CACHE_SIZE = 15728640;
-
+	//private static final int MAX_CACHE_SIZE = 15728640;
+	private static final int MAX_CACHE_SIZE = 31457280;
+	
 	@SuppressWarnings("unchecked")
 	private CacheStore() {
 		cacheMap = new HashMap<String, String>();
-		bitmapMap = new HashMap<String, Bitmap>();
+		bitmapMap = new HashMap<String, SoftReference<Bitmap>>();
 		File fullCacheDir = new File(Environment.getExternalStorageDirectory()
 				.toString(), cacheDir);
 		if (!fullCacheDir.exists()) {
@@ -90,6 +94,69 @@ public class CacheStore {
 		return INSTANCE;
 	}
 
+	private void saveFileFromStream(InputStream input, FileOutputStream output) {
+		try {
+			try {
+				final byte[] buffer = new byte[1024];
+				int read;
+				while ((read = input.read(buffer)) != -1)
+					output.write(buffer, 0, read);
+
+				output.flush();
+			} finally {
+				output.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized void saveCacheFile(String cacheUri, InputStream input) {
+		File fullCacheDir = new File(Environment.getExternalStorageDirectory()
+				.toString(), cacheDir);
+
+		File[] fileList = fullCacheDir.listFiles();
+
+		int cacheSize = 0;
+		for (File f : fileList) {
+			cacheSize += f.length();
+			if (cacheSize >= MAX_CACHE_SIZE) {
+				freeCache(fileList);
+				return;
+			}
+		}
+
+		String fileLocalName = new SimpleDateFormat("ddMMyyhhmmssSSS")
+				.format(new java.util.Date()) + ".PNG";
+		File fileUri = new File(fullCacheDir.toString(), fileLocalName);
+		FileOutputStream outStream = null;
+		try {
+			outStream = new FileOutputStream(fileUri);
+			// image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+			saveFileFromStream(input, outStream);
+			outStream.flush();
+			outStream.close();
+			cacheMap.put(cacheUri, fileLocalName);
+			Log.i("CACHE", "Saved file " + cacheUri + " (which is now "
+					+ fileUri.toString() + ") correctly");
+			//bitmapMap.put(cacheUri, new SoftReference<Bitmap>(image));
+			ObjectOutputStream os = new ObjectOutputStream(
+					new BufferedOutputStream(new FileOutputStream(new File(
+							fullCacheDir.toString(), CACHE_FILENAME))));
+			os.writeObject(cacheMap);
+			os.close();
+		} catch (FileNotFoundException e) {
+			Log.i("CACHE", "Error: File " + cacheUri + " was not found!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.i("CACHE", "Error: File could not be stuffed!");
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.i("CACHE", "Error: unknown exception!");
+		}
+
+	}
+
 	public synchronized void saveCacheFile(String cacheUri, Bitmap image) {
 		File fullCacheDir = new File(Environment.getExternalStorageDirectory()
 				.toString(), cacheDir);
@@ -106,8 +173,7 @@ public class CacheStore {
 		}
 
 		String fileLocalName = new SimpleDateFormat("ddMMyyhhmmssSSS")
-				.format(new java.util.Date())
-				+ ".PNG";
+				.format(new java.util.Date()) + ".PNG";
 		File fileUri = new File(fullCacheDir.toString(), fileLocalName);
 		FileOutputStream outStream = null;
 		try {
@@ -118,7 +184,7 @@ public class CacheStore {
 			cacheMap.put(cacheUri, fileLocalName);
 			Log.i("CACHE", "Saved file " + cacheUri + " (which is now "
 					+ fileUri.toString() + ") correctly");
-			bitmapMap.put(cacheUri, image);
+			bitmapMap.put(cacheUri, new SoftReference<Bitmap>(image));
 			ObjectOutputStream os = new ObjectOutputStream(
 					new BufferedOutputStream(new FileOutputStream(new File(
 							fullCacheDir.toString(), CACHE_FILENAME))));
@@ -162,8 +228,11 @@ public class CacheStore {
 	}
 
 	public Bitmap getCacheFile(String cacheUri) {
-		if (bitmapMap.containsKey(cacheUri))
-			return (Bitmap) bitmapMap.get(cacheUri);
+		if (bitmapMap.containsKey(cacheUri)) {
+			SoftReference<Bitmap> softReference = bitmapMap.get(cacheUri);
+			return softReference.get();
+		}
+			//return (Bitmap) bitmapMap.get(cacheUri);
 
 		if (!cacheMap.containsKey(cacheUri))
 			return null;
@@ -175,8 +244,12 @@ public class CacheStore {
 			return null;
 
 		Log.i("CACHE", "File " + cacheUri + " has been found in the Cache");
-		Bitmap bm = BitmapFactory.decodeFile(fileUri.toString());
-		bitmapMap.put(cacheUri, bm);
+		
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		//options.inSampleSize = 2;
+		
+		Bitmap bm = BitmapFactory.decodeFile(fileUri.toString(), options);
+		bitmapMap.put(cacheUri, new SoftReference<Bitmap>(bm));
 		return bm;
 	}
 }

@@ -141,6 +141,10 @@ public class CategoryDataSource {
 	public List<Category> getCategories(int parentId) {
 		List<Category> categories = new ArrayList<Category>();
 
+		if(!database.isOpen()) {
+			return categories;
+		}
+		
 		Cursor cursor = null;
 		if (parentId != -1) {
 			cursor = database.query(

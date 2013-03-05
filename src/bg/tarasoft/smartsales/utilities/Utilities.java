@@ -22,6 +22,10 @@ import bg.tarasoft.smartsales.views.HeaderBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.hardware.Camera.Size;
 import android.location.Criteria;
 import android.location.Location;
@@ -252,19 +256,19 @@ public class Utilities {
 		if (history.size() != 1) {
 			// CLEARS HISTORY
 			for (ProductsGroup p : history) {
-				if(p.equals(pGroup)){
+				if (p.equals(pGroup)) {
 					break;
-				}else{
+				} else {
 					clickedPosition++;
 				}
 			}
-			int size =  history.size() - clickedPosition;
-		
-			for(int i=0; i<size-1; ++i){
-				history.remove(history.size()-1);
+			int size = history.size() - clickedPosition;
+
+			for (int i = 0; i < size - 1; ++i) {
+				history.remove(history.size() - 1);
 				System.out.println("REMOVING ONE");
 			}
-			
+
 			if (pGroup instanceof Category) {
 				// your code
 				Intent intent;

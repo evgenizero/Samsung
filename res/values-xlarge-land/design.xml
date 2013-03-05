@@ -11,5 +11,6 @@
     <item name="header_pholder_weight" format="float" type="dimen">0.1</item>
     <item name="header_bar_weight" format="float" type="dimen">1.3</item>
     <item name="bottom_headers_weight" format="float" type="dimen">1.1</item>
+    <item name="product_new_check_weight" format="float" type="dimen">0.7</item>
 
 </resources>

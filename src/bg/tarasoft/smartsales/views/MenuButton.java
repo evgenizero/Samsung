@@ -39,7 +39,6 @@ public class MenuButton extends LinearLayout implements OnClickListener {
 		label = (TextView) view.findViewById(R.id.h_label);
 		label.setText(category.getName());
 		label.setOnClickListener(this);
-
 	}
 
 	public MenuButton(Context context, Category c, HeaderBar headerBar2,
@@ -50,7 +49,8 @@ public class MenuButton extends LinearLayout implements OnClickListener {
 		this.category = c;
 		mContext = context;
 		label = (TextView) view.findViewById(R.id.h_label);
-		label.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_back));
+		label.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.main_back));
 		label.setTextColor(getResources().getColor(R.color.text_color));
 		label.setText(category.getName());
 		label.setOnClickListener(this);
@@ -73,12 +73,13 @@ public class MenuButton extends LinearLayout implements OnClickListener {
 		Intent intent = new Intent(mContext, SubCategoriesActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra("parentId", category.getId());
-	//	intent.putExtra("categoryName", category.getName());
+		// intent.putExtra("categoryName", category.getName());
 		intent.putExtra("noSeries", true);
-		ArrayList<ProductsGroup> history = Utilities.getHistory((Activity)mContext);
+		ArrayList<ProductsGroup> history = Utilities
+				.getHistory((Activity) mContext);
 		history.clear();
 		history.add(category);
-//		intent.putExtra("headerBar", headerBar.getLabelsCategories());
+		// intent.putExtra("headerBar", headerBar.getLabelsCategories());
 		// intent.putExtra("addToBar", true);
 		mContext.startActivity(intent);
 	}

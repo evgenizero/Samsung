@@ -1,5 +1,6 @@
 package bg.tarasoft.smartsales.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import bg.tarasoft.smartsales.bean.Product;
@@ -48,6 +49,7 @@ public class ProductAdapterNew extends BaseAdapter {
 			holder = new ProductHolder();
 
 			holder.pv = (ProductView) convertView.findViewById(R.id.pv1);
+			holder.pv.setContext(context);
 			
 			convertView.setTag(holder);
 		} else {
@@ -60,5 +62,15 @@ public class ProductAdapterNew extends BaseAdapter {
         holder.pv.setProduct(product);
         
 		return convertView;
+	}
+
+	public List<Integer> getSelectedIds() {
+		List<Integer> ids = new ArrayList<Integer>();
+		for(Product product : products) {
+			if(product.isToCompare()) {
+				ids.add(product.getId());
+			}
+		}
+		return ids;
 	}
 }

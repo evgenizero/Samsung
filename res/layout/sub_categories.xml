@@ -19,7 +19,7 @@
         <Button
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/bar_height"
             android:layout_alignParentLeft="true"
             android:background="@android:color/transparent"
             android:text="Button"
@@ -27,17 +27,22 @@
             android:visibility="visible" />
     </RelativeLayout>
 
-    <GridView
-        android:id="@+id/sub_categories"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8"
-        android:gravity="center"
-        android:horizontalSpacing="10dp"
-        android:numColumns="@integer/sub_cat_columns"
-        android:stretchMode="columnWidth"
-        android:background="@drawable/main_back"
-        android:verticalSpacing="25dp" />
+        android:layout_weight="8" >
+
+        <GridView
+            android:id="@+id/sub_categories"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/main_back"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="@integer/sub_cat_columns"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="25dp" />
+    </RelativeLayout>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
@@ -46,10 +51,10 @@
         android:layout_weight="@dimen/bottom_headers_weight" >
 
         <LinearLayout
-            android:layout_marginTop="@dimen/bottom_offset"
             android:id="@+id/buttons_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/bottom_offset"
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>

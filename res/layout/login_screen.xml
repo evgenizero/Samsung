@@ -21,7 +21,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/bar_height"
+            android:layout_height="wrap_content"
             android:background="@drawable/head_back" >
 
             <LinearLayout
@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onLoginClick"
-                android:text="Login" />
+                android:text="Влизане" />
 
             <Button
                 android:id="@+id/button2"
@@ -135,7 +135,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onCancelClick"
-                android:text="Cancel" />
+                android:text="Изход" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onGuestClick"
+                android:text="Гост" />
+
         </LinearLayout>
 
         <CheckBox

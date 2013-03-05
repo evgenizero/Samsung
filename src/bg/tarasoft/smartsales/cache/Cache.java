@@ -1,5 +1,7 @@
 package bg.tarasoft.smartsales.cache;
 
+import java.io.InputStream;
+
 import android.graphics.Bitmap;
 import android.os.Environment;
 
@@ -23,6 +25,12 @@ public class Cache {
 		} else {
 			return false;
 		}
+	}
+
+	public static void saveCacheFile(String cacheUri, InputStream in) {
+		if (!isCacheWritable())
+			return;
+		cache.saveCacheFile(cacheUri, in);
 	}
 
 	public static void saveCacheFile(String cacheUri, Bitmap image) {

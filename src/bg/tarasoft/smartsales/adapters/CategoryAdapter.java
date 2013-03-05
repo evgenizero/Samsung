@@ -13,6 +13,7 @@ import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.cache.Cache;
 import bg.tarasoft.smartsales.listeners.OnCategoryListItemClickListener;
 import bg.tarasoft.smartsales.requests.DownloadImagesTask;
+import bg.tarasoft.smartsales.requests.ImageDownloader;
 import bg.tarasoft.smartsales.samsung.R;
 import android.app.Activity;
 import android.content.Context;
@@ -35,7 +36,7 @@ public class CategoryAdapter extends BaseAdapter {
 	private List<Category> categories;
 	private int layoutId;
 	private HashMap<Integer, Integer> items;
-
+	
 	private static final int LIST_ITEM_LEFT = 0;
 	private static final int LIST_ITEM_RIGHT = 1;
 	private static final int LAYOUTS_MAX_COUNT = 2;
@@ -120,14 +121,15 @@ public class CategoryAdapter extends BaseAdapter {
 		String url = item.getImageUrl();
 
 		if (url != null) {
-			downloadImage(url, holder.image);
-//			Bitmap bm = Cache.getCacheFile(url);
-//			if (bm == null) {
-//				holder.image.setTag(url);
-//				new DownloadImagesTask().execute(holder.image);
-//			} else {
-//				holder.image.setImageBitmap(bm);
-//			}
+			Bitmap bm = Cache.getCacheFile(url);
+			if (bm == null) {
+				holder.image.setTag(url);
+				//new DownloadImagesTask().execute(holder.image);
+				//imageDownloader.download(url, holder.image);
+				new ImageDownloader().downloadImage(holder.image);
+			} else {
+				holder.image.setImageBitmap(bm);
+			}
 		} else {
 			holder.image.setImageResource(R.drawable.no_photo);
 			holder.image.setTag("true");
@@ -135,10 +137,10 @@ public class CategoryAdapter extends BaseAdapter {
 		}
 
 		holder.text.setText(item.getName());
-		
-		if(items != null) {
+
+		if (items != null) {
 			Integer num = items.get(item.getId());
-			if(num != null) {
+			if (num != null) {
 				holder.text2.setText(String.valueOf(num));
 			} else {
 				holder.text2.setText(" ");
@@ -148,11 +150,4 @@ public class CategoryAdapter extends BaseAdapter {
 		convertView.requestLayout();
 		return convertView;
 	}
-	
-	private void downloadImage(String url, ImageView image) {
-		MyApplication app = ((MyApplication) ((Activity) context)
-				.getApplication());
-		app.getLoader().displayImage(url, image);
-	}
-
 }

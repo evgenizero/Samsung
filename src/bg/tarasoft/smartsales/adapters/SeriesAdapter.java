@@ -12,6 +12,7 @@ import bg.tarasoft.smartsales.bean.Serie;
 import bg.tarasoft.smartsales.cache.Cache;
 import bg.tarasoft.smartsales.listeners.OnCategoryListItemClickListener;
 import bg.tarasoft.smartsales.requests.DownloadImagesTask;
+import bg.tarasoft.smartsales.requests.ImageDownloader;
 import bg.tarasoft.smartsales.samsung.R;
 import android.content.Context;
 import android.content.Intent;
@@ -82,7 +83,9 @@ public class SeriesAdapter extends BaseAdapter {
 			Bitmap bm = Cache.getCacheFile(url);
 			if (bm == null) {
 				holder.image.setTag(url);
-				new DownloadImagesTask().execute(holder.image);
+				//new DownloadImagesTask().execute(holder.image);
+				//downloader.download(url, holder.image);
+				new ImageDownloader().downloadImage(holder.image);
 			} else {
 				holder.image.setImageBitmap(bm);
 			}

@@ -20,6 +20,7 @@ public class OnSettingsButtonClick implements OnTouchListener {
 	private Handler requestsHandler = new Handler();
 
 	private int start, end;
+	private boolean zero = false;
 
 	private Runnable requestTask = new Runnable() {
 
@@ -29,10 +30,22 @@ public class OnSettingsButtonClick implements OnTouchListener {
 
 			System.out.println("END: " + String.valueOf(end));
 
+			if(end == 0) {
+				zero = true;
+			}
+			
+			if(start > 55) {
+				if(zero) {
+					end+=60;
+				}
+			}
+			
+			
 			if ((end - start) > 4) {
 				// Toast.makeText(context, "blob", Toast.LENGTH_SHORT).show();
 
 				end = 0;
+				zero = false;
 				
 				Intent intent = new Intent(context,
 						bg.tarasoft.smartsales.EnterPassword.class);

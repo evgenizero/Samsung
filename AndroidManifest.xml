@@ -22,15 +22,14 @@
         android:targetSdkVersion="17" />
 
     <application
+        android:name="bg.tarasoft.smartsales.MyApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" 
-        android:name="bg.tarasoft.smartsales.MyApplication">
+        android:theme="@style/AppTheme" >
         <activity
-            android:name="bg.tarasoft.smartsales.SubCategoriesActivity"
+            android:name="bg.tarasoft.smartsales.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_main_categories"
-            android:noHistory="true"
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,37 +38,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="bg.tarasoft.smartsales.LoginActivity"
+            android:name="bg.tarasoft.smartsales.SubCategoriesActivity"
             android:label="@string/title_activity_main_categories"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:noHistory="true" >
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name="bg.tarasoft.smartsales.MainCategories"
             android:label="SubCategories"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:noHistory="true" >
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name="bg.tarasoft.smartsales.SubSubCategoriesActivity"
             android:label="SubCategories"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:noHistory="true" >
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name="bg.tarasoft.smartsales.ProductsActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:noHistory="true" >
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name="bg.tarasoft.smartsales.HTMLPlayerActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:noHistory="true" >
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name="bg.tarasoft.smartsales.EnterPassword"
-            android:theme="@android:style/Theme.NoTitleBar"
-             >
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:name="bg.tarasoft.smartsales.Settings"

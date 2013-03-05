@@ -32,7 +32,7 @@ public class LoginActivity extends Activity {
 		
 		if(preferences.getBoolean("remember", false)) {
 			processRequest();
-		}
+		} 
 	}
 
 	public void onLoginClick(View v) {
@@ -42,9 +42,20 @@ public class LoginActivity extends Activity {
 		data.setPassword(password.getText().toString());
 		email.setText("");
 		password.setText("");
+		SharedPreferences.Editor edit = preferences.edit();
+		edit.putBoolean("guest", false);
+		edit.apply();
 		new LoginRequest(this, data);
 	}
 
+	public void onGuestClick(View v) {
+		checkBoxLogin.setChecked(false);
+		SharedPreferences.Editor edit = preferences.edit();
+		edit.putBoolean("guest", true);
+		edit.apply();
+		processRequest();
+	}
+	
 	public void onCancelClick(View v) {
 		finish();
 	}
@@ -60,5 +71,6 @@ public class LoginActivity extends Activity {
 		//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 		finish();
+		
 	}
 }
