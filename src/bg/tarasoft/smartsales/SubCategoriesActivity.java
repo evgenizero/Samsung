@@ -21,6 +21,7 @@ import bg.tarasoft.smartsales.listeners.OnSettingsButtonClick;
 import bg.tarasoft.smartsales.listeners.OnSubCategoryClickListener;
 import bg.tarasoft.smartsales.requests.GetCategoriesRequest;
 import bg.tarasoft.smartsales.requests.GetChecksumRequest;
+import bg.tarasoft.smartsales.requests.GetModelsRequest;
 import bg.tarasoft.smartsales.requests.GetProductsRequest;
 import bg.tarasoft.smartsales.requests.GetSeriesRequest;
 import bg.tarasoft.smartsales.requests.GetStoresRequest;

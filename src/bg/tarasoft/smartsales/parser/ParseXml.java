@@ -14,15 +14,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import bg.tarasoft.smartsales.bean.Category;
+import bg.tarasoft.smartsales.bean.Model;
 import bg.tarasoft.smartsales.bean.Product;
 import bg.tarasoft.smartsales.bean.Serie;
 import bg.tarasoft.smartsales.bean.Store;
 import bg.tarasoft.smartsales.bean.StoreType;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
+import bg.tarasoft.smartsales.database.SeriesModelsDataSource;
 import bg.tarasoft.smartsales.database.SeriesProductsDataSource;
 
 public class ParseXml {
 
+	private static final String MODEL = "model";
 	private static final String PRODUCT = "product";
 	private static final String CHECKSUM = "checksum";
 	private static final String CATEGORY_ID = "category_id";
@@ -314,5 +317,65 @@ public class ParseXml {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void parseModels(Context context, Document doc,
+			List<Model> models, ProgressDialog progress) {
+
+		SeriesModelsDataSource dataSource = new SeriesModelsDataSource(context);
+		dataSource.open();
+		dataSource.deleteRowsIfTableExists();
+
+		try {
+			NodeList listOfCategories = doc.getElementsByTagName(MODEL);
+
+			Model model = null;
+
+			List<Integer> seriesList = null;
+
+			HashMap<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
+
+			for (int s = 0; s < listOfCategories.getLength(); s++) {
+				Node firstPersonNode = listOfCategories.item(s);
+				if (firstPersonNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element firstPersonElement = (Element) firstPersonNode;
+					model = new Model();
+					model.setId(Integer.valueOf(getElementByName(
+							firstPersonElement, ID)));
+					model.setModelName(getElementByName(firstPersonElement,
+							NAME));
+					model.setModelPicUrl(getElementByName(firstPersonElement,
+							PIC));
+					NodeList series = firstPersonElement
+							.getElementsByTagName("series");
+
+					if (series != null) {
+						Node n = series.item(0);
+						if (n != null) {
+							seriesList = new ArrayList<Integer>();
+							NodeList list = n.getChildNodes();
+
+							for (int i = 0; i < list.getLength(); i++) {
+								if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
+									seriesList.add(Integer.valueOf(list.item(i)
+											.getTextContent()));
+
+								}
+							}
+
+							map.put(model.getId(), seriesList);
+
+						}
+					}
+
+					models.add(model);
+				}
+			}
+			dataSource.insertValues(map, progress);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		dataSource.close();
 	}
 }

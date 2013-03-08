@@ -195,6 +195,7 @@ public class GetChecksumRequest extends SamsungGetRequest {
 			new GetStoresRequest(context);
 			new GetCategoriesRequest(context);
 			new GetProductsRequest(context);
+			new GetModelsRequest(context);
 			new GetSeriesRequest(context);
 			executor.execute();
 		} else {

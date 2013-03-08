@@ -8,6 +8,7 @@ public class Product implements ProductsGroup{
 	private int label;
 	private int price;
 	private boolean isChecked;
+	private Model modelId;
 	public static final int LABEL_NONE = 0;
 	public static final int LABEL_NEW = 1;
 	public static final int LABEL_LAST = 2;
@@ -80,5 +81,13 @@ public class Product implements ProductsGroup{
 	
 	public void setToCompare(boolean isChecked) {
 		this.isChecked = isChecked;
+	}
+
+	public Model getModelId() {
+		return modelId;
+	}
+
+	public void setModelId(Model modelId) {
+		this.modelId = modelId;
 	}
 }

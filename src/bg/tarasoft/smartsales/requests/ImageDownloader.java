@@ -28,7 +28,7 @@ public class ImageDownloader {
 					public void run() {
 //						if (b != null) {
 //							image.setImageBitmap(b);
-//							//Cache.saveCacheFile((String) image.getTag(), b);
+//							Cache.saveCacheFile((String) image.getTag(), b);
 //						} else {
 //							image.setImageResource(R.drawable.no_photo);
 //						}
@@ -51,16 +51,19 @@ public class ImageDownloader {
 		InputStream in = null;
 		try {
 			in = OpenHttpConnection(url);
+			
 //			BitmapFactory.Options options = new BitmapFactory.Options();
-//			//options.inSampleSize = 4;
-//			if(image == null) {
-//				System.out.println("IMAGE IS DEAD!!!!!!!!!!");
-//			}
-//			bitmap = BitmapFactory.decodeStream(in, null, options);
+//			options.inJustDecodeBounds = true;
+//			BitmapFactory.decodeStream(in, null, options);
+//			options.inSampleSize = calculateInSampleSize(options, 93, 130);
+//			options.inJustDecodeBounds = false;
+//			
+			//bitmap = BitmapFactory.decodeStream(in, null, options);
 			
 			Cache.saveCacheFile(url, in);
 			in.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 
@@ -94,5 +97,34 @@ public class ImageDownloader {
 			return null;
 		}
 		return in;
+	}
+	
+	public static int calculateInSampleSize(BitmapFactory.Options options,
+			int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		
+		System.out.println("HEIGHT: " + height);
+		System.out.println("WIDTH: " + width);
+		
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			// Calculate ratios of height and width to requested height and
+			// width
+			final int heightRatio = Math.round((float) height
+					/ (float) reqHeight);
+			final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+			// Choose the smallest ratio as inSampleSize value, this will
+			// guarantee
+			// a final image with both dimensions larger than or equal to the
+			// requested height and width.
+			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+		}
+
+		return inSampleSize;
 	}
 }

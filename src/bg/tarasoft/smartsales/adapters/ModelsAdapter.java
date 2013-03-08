@@ -1,37 +1,24 @@
 package bg.tarasoft.smartsales.adapters;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
-import bg.tarasoft.smartsales.bean.Category;
-import bg.tarasoft.smartsales.bean.Serie;
-import bg.tarasoft.smartsales.cache.Cache;
-import bg.tarasoft.smartsales.listeners.OnCategoryListItemClickListener;
-import bg.tarasoft.smartsales.requests.DownloadImagesTask;
-import bg.tarasoft.smartsales.requests.ImageDownloader;
-import bg.tarasoft.smartsales.samsung.R;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import bg.tarasoft.smartsales.bean.Model;
+import bg.tarasoft.smartsales.bean.Serie;
+import bg.tarasoft.smartsales.cache.Cache;
+import bg.tarasoft.smartsales.requests.ImageDownloader;
+import bg.tarasoft.smartsales.samsung.R;
 
-public class SeriesAdapter extends BaseAdapter {
+public class ModelsAdapter extends BaseAdapter {
 
 	private Context context;
-	private List<Serie> series;
+	private List<Model> models;
 	private int layoutId;
 
 	private class ViewHolder {
@@ -39,22 +26,22 @@ public class SeriesAdapter extends BaseAdapter {
 		TextView text;
 	}
 
-	public SeriesAdapter(Context context, List<Serie> series, int layoutId) {
-		this(context, series);
+	public ModelsAdapter(Context context, List<Model> models, int layoutId) {
+		this(context, models);
 		this.layoutId = layoutId;
 	}
 
-	public SeriesAdapter(Context context, List<Serie> series) {
+	public ModelsAdapter(Context context, List<Model> models) {
 		this.context = context;
-		this.series = series;
+		this.models = models;
 	}
 
 	public int getCount() {
-		return series.size();
+		return models.size();
 	}
 
 	public Object getItem(int position) {
-		return series.get(position);
+		return models.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -75,9 +62,9 @@ public class SeriesAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Serie item = (Serie) getItem(position);
+		Model item = (Model) getItem(position);
 
-		String url = item.getPicUrl();
+		String url = item.getModelPicUrl();
 
 		if (url != null) {
 			Bitmap bm = Cache.getCacheFile(url);
@@ -93,7 +80,7 @@ public class SeriesAdapter extends BaseAdapter {
 
 		}
 
-		holder.text.setText(item.getName());
+		holder.text.setText(item.getModelName());
 
 		convertView.requestLayout();
 		return convertView;

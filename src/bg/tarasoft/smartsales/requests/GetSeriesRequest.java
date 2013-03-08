@@ -25,7 +25,7 @@ public class GetSeriesRequest extends SamsungGetRequest {
 		this.in = in;
 	}
 	
-	protected GetSeriesRequest(Context context) {
+	public GetSeriesRequest(Context context) {
 		super(
 				context,
 				"Getting series",

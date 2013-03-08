@@ -8,6 +8,7 @@ import android.util.Log;
 
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
+	public static final String TABLE_MODELS = "models";
 	public static final String TABLE_PRODUCT_SERIE = "product_series";
 	public static final String TABLE_SERIES = "series";
 	public static final String TABLE_CATEGORIES = "categories";
@@ -23,6 +24,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_STATUS = "status";
 	public static final String COLUMN_IS_SHOWN = "is_shown";
 	public static final String COLUMN_PRODUCT_PRICE = "price";
+	public static final String COLUMN_MODEL_ID = "model_id";
+	public static final String TABLE_MODEL_SERIE = "model_series";
 
 	public static final String COLUMN_PARENT_CATEGORY_ID = "category_id";
 	public static final String COLUMN_CHECKSUM = "checksum";
@@ -60,6 +63,11 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 			+ " integer primary key autoincrement, " + COLUMN_CATEGORY_ID
 			+ " integer not null, " + COLUMN_SERIE_ID + " integer not null);";
 
+	private static final String CREATE_TABLE_MODEL_SERIE = "create table "
+			+ TABLE_MODEL_SERIE + "(" + COLUMN_ID
+			+ " integer primary key autoincrement, " + COLUMN_CATEGORY_ID
+			+ " integer not null, " + COLUMN_SERIE_ID + " integer not null);";
+
 	private static final String CREATE_TABLE_SERIES = "create table "
 			+ TABLE_SERIES + "(" + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_CATEGORY_ID
@@ -82,6 +90,12 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 			+ " text not null, " + COLUMN_STATUS + " integer not null, "
 			+ COLUMN_PRODUCT_PRICE + " integer not null);";
 
+	private static final String CREATE_TABLE_MODELS = "create table "
+			+ TABLE_MODELS + "(" + COLUMN_ID
+			+ " integer primary key autoincrement, " + COLUMN_MODEL_ID
+			+ " integer not null, " + COLUMN_NAME + " text not null, "
+			+ COLUMN_PIC + " text not null);";
+
 	private static final String CREATE_TABLE_CHECKSUMS = "create table "
 			+ TABLE_CHECKSUMS + "(" + COLUMN_ID
 			+ " integer primary key autoincrement, " + COLUMN_TYPE
@@ -99,6 +113,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		db.execSQL(CREATE_TABLE_MODELS);
+		db.execSQL(CREATE_TABLE_MODEL_SERIE);
 		db.execSQL(CREATE_TABLE_STORE_RETAILS);
 		db.execSQL(CREATE_TABLE_STORES);
 		db.execSQL(CREATE_TABLE_PRODUCTS);
@@ -121,6 +137,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHECKSUMS);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERIES);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCT_SERIE);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MODEL_SERIE);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MODELS);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGS);
 		onCreate(db);
 	}

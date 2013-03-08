@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import bg.tarasoft.smartsales.bean.Category;
-import bg.tarasoft.smartsales.bean.Serie;
-
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,7 +15,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class SeriesProductsDataSource {
+public class SeriesModelsDataSource {
 
 	private SQLiteDatabase database;
 	private MySQLiteOpenHelper dbHelper;
@@ -27,7 +24,7 @@ public class SeriesProductsDataSource {
 			MySQLiteOpenHelper.COLUMN_CATEGORY_ID,
 			MySQLiteOpenHelper.COLUMN_SERIE_ID };
 
-	public SeriesProductsDataSource(Context context) {
+	public SeriesModelsDataSource(Context context) {
 		dbHelper = new MySQLiteOpenHelper(context);
 	}
 
@@ -39,7 +36,7 @@ public class SeriesProductsDataSource {
 		dbHelper.close();
 	}
 
-	public void insertValues(List<Integer> series, int productId,
+	public void insertValues(List<Integer> series, int modelId,
 			ProgressDialog progress) {
 
 		ContentValues values = new ContentValues();
@@ -47,11 +44,10 @@ public class SeriesProductsDataSource {
 		for (Integer i : series) {
 			values.clear();
 			values.put(MySQLiteOpenHelper.COLUMN_SERIE_ID, i);
-			values.put(MySQLiteOpenHelper.COLUMN_CATEGORY_ID, productId);
-			if (database.insert(MySQLiteOpenHelper.TABLE_PRODUCT_SERIE, null,
+			values.put(MySQLiteOpenHelper.COLUMN_MODEL_ID, modelId);
+			if (database.insert(MySQLiteOpenHelper.TABLE_MODEL_SERIE, null,
 					values) != -1) {
 				System.out.println("PROD SERIE INSERTED");
-
 			}
 
 		}
@@ -61,8 +57,6 @@ public class SeriesProductsDataSource {
 
 	public void insertValues(HashMap<Integer, List<Integer>> map,
 			ProgressDialog progress) {
-
-		System.out.println("MAP: " + map);
 
 		int size = 0;
 
@@ -93,9 +87,8 @@ public class SeriesProductsDataSource {
 					values.put(MySQLiteOpenHelper.COLUMN_SERIE_ID, j);
 					values.put(MySQLiteOpenHelper.COLUMN_CATEGORY_ID,
 							(Integer) pairs.getKey());
-					if (database.insert(MySQLiteOpenHelper.TABLE_PRODUCT_SERIE,
+					if (database.insert(MySQLiteOpenHelper.TABLE_MODEL_SERIE,
 							null, values) != -1) {
-						System.out.println("PROD SERIE INSERTED");
 
 						total++;
 
@@ -110,64 +103,14 @@ public class SeriesProductsDataSource {
 		database.setTransactionSuccessful();
 		database.endTransaction();
 
-		// ContentValues values = null;
-		// for (int i = 0; i < map.size(); i++) {
-		// List<Integer> values3 = map.get(i);
-		//
-		// if (values3 != null) {
-		//
-		// System.out.println("ID: " + i);
-		// System.out.println("LIST: " + values3);
-		//
-		// for (Integer j : values3) {
-		// values = new ContentValues();
-		// values.put(MySQLiteOpenHelper.COLUMN_SERIE_ID, j);
-		// values.put(MySQLiteOpenHelper.COLUMN_CATEGORY_ID, i);
-		// if (database.insert(MySQLiteOpenHelper.TABLE_PRODUCT_SERIE,
-		// null, values) != -1) {
-		// System.out.println("PROD SERIE INSERTED");
-		//
-		// total++;
-		//
-		// progress.setProgress((int) (total * 100) / size);
-		//
-		// }
-		// }
-		// }
-		// }
-
 	}
 
 	public void deleteRowsIfTableExists() {
 		Cursor curs = database.rawQuery(
 				"SELECT name FROM sqlite_master WHERE type='table' AND name='"
-						+ MySQLiteOpenHelper.TABLE_PRODUCT_SERIE + "'", null);
+						+ MySQLiteOpenHelper.TABLE_MODEL_SERIE + "'", null);
 		if (curs.getCount() == 1) {
-			database.delete(MySQLiteOpenHelper.TABLE_PRODUCT_SERIE, null, null);
+			database.delete(MySQLiteOpenHelper.TABLE_MODEL_SERIE, null, null);
 		}
 	}
-
-	private List<Integer> getProducts(int serieId) {
-		List<Integer> series = new ArrayList<Integer>();
-
-		Cursor cursor = database.query(
-				MySQLiteOpenHelper.TABLE_SERIES,
-				allColumns,
-				MySQLiteOpenHelper.COLUMN_SERIE_ID + "="
-						+ String.valueOf(serieId), null, null, null, null);
-
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Integer prod = cursorToProd(cursor);
-			series.add(prod);
-			cursor.moveToNext();
-		}
-		cursor.close();
-		return series;
-	}
-
-	private Integer cursorToProd(Cursor cursor) {
-		return cursor.getInt(1);
-	}
-
 }

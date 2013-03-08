@@ -27,9 +27,9 @@ public class CacheStore {
 	private HashMap<String, SoftReference<Bitmap>> bitmapMap;
 	private static final String cacheDir = "/Android/data/bg.tarasoft.samsung_app/cache/";
 	private static final String CACHE_FILENAME = ".cache";
-	//private static final int MAX_CACHE_SIZE = 15728640;
+	// private static final int MAX_CACHE_SIZE = 15728640;
 	private static final int MAX_CACHE_SIZE = 31457280;
-	
+
 	@SuppressWarnings("unchecked")
 	private CacheStore() {
 		cacheMap = new HashMap<String, String>();
@@ -136,10 +136,19 @@ public class CacheStore {
 			saveFileFromStream(input, outStream);
 			outStream.flush();
 			outStream.close();
+
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(fileUri.toString(), options);
+			options.inSampleSize = calculateInSampleSize(options, 93, 130);
+			options.inJustDecodeBounds = false;
+
+			Bitmap bm = BitmapFactory.decodeFile(fileUri.toString(), options);
+			saveFile(fileUri, bm, cacheUri, fileLocalName, fullCacheDir);
+
 			cacheMap.put(cacheUri, fileLocalName);
 			Log.i("CACHE", "Saved file " + cacheUri + " (which is now "
 					+ fileUri.toString() + ") correctly");
-			//bitmapMap.put(cacheUri, new SoftReference<Bitmap>(image));
 			ObjectOutputStream os = new ObjectOutputStream(
 					new BufferedOutputStream(new FileOutputStream(new File(
 							fullCacheDir.toString(), CACHE_FILENAME))));
@@ -175,6 +184,11 @@ public class CacheStore {
 		String fileLocalName = new SimpleDateFormat("ddMMyyhhmmssSSS")
 				.format(new java.util.Date()) + ".PNG";
 		File fileUri = new File(fullCacheDir.toString(), fileLocalName);
+		saveFile(fileUri, image, cacheUri, fileLocalName, fullCacheDir);
+	}
+
+	private void saveFile(File fileUri, Bitmap image, String cacheUri,
+			String fileLocalName, File fullCacheDir) {
 		FileOutputStream outStream = null;
 		try {
 			outStream = new FileOutputStream(fileUri);
@@ -230,26 +244,57 @@ public class CacheStore {
 	public Bitmap getCacheFile(String cacheUri) {
 		if (bitmapMap.containsKey(cacheUri)) {
 			SoftReference<Bitmap> softReference = bitmapMap.get(cacheUri);
+			Log.i("cache getting", "da be ");
 			return softReference.get();
 		}
-			//return (Bitmap) bitmapMap.get(cacheUri);
 
-		if (!cacheMap.containsKey(cacheUri))
+		if (!cacheMap.containsKey(cacheUri)) {
+			Log.i("problem in cache", "no such uri in cache");
 			return null;
+		}
 		String fileLocalName = cacheMap.get(cacheUri);
 		File fullCacheDir = new File(Environment.getExternalStorageDirectory()
 				.toString(), cacheDir);
 		File fileUri = new File(fullCacheDir.toString(), fileLocalName);
-		if (!fileUri.exists())
+		if (!fileUri.exists()) {
+			Log.i("problem in cache", "no such file");
 			return null;
+		}
 
 		Log.i("CACHE", "File " + cacheUri + " has been found in the Cache");
-		
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		//options.inSampleSize = 2;
-		
-		Bitmap bm = BitmapFactory.decodeFile(fileUri.toString(), options);
+
+		Bitmap bm = BitmapFactory.decodeFile(fileUri.toString());
 		bitmapMap.put(cacheUri, new SoftReference<Bitmap>(bm));
+
 		return bm;
+	}
+
+	public static int calculateInSampleSize(BitmapFactory.Options options,
+			int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+
+		System.out.println("HEIGHT: " + height);
+		System.out.println("WIDTH: " + width);
+
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			// Calculate ratios of height and width to requested height and
+			// width
+			final int heightRatio = Math.round((float) height
+					/ (float) reqHeight);
+			final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+			// Choose the smallest ratio as inSampleSize value, this will
+			// guarantee
+			// a final image with both dimensions larger than or equal to the
+			// requested height and width.
+			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+		}
+
+		return inSampleSize;
 	}
 }
