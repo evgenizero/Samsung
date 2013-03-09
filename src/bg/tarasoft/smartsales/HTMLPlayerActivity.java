@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +25,7 @@ import bg.tarasoft.smartsales.bean.Product;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
 import bg.tarasoft.smartsales.database.ProductDataSource;
+import bg.tarasoft.smartsales.listeners.OnAccountButtonClick;
 import bg.tarasoft.smartsales.samsung.R;
 import bg.tarasoft.smartsales.utilities.Utilities;
 import bg.tarasoft.smartsales.views.HeaderBar;
@@ -35,19 +37,27 @@ public class HTMLPlayerActivity extends Activity {
 	private ArrayList<ProductsGroup> categoriesForBar;
 	public static final String BASE_FOLDER = "smartsales";
 	public static final String PRODUCTS_FOLDER = "products";
+	private ProductDataSource ds;
+	private TextView accountManage;
+	private SharedPreferences settings;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(bg.tarasoft.smartsales.samsung.R.layout.html);
-		
+
 		// Keep screen on
 		getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
-				
+
 		mContext = this;
 		headerBar = (HeaderBar) findViewById(R.id.header_bar);
 		view = (WebView) findViewById(R.id.webView);
+
+		accountManage = (TextView) findViewById(R.id.account_button);
+		accountManage.setOnClickListener(new OnAccountButtonClick(this));
+		
+		setAccountInfo();
 
 		view = (WebView) findViewById(R.id.webView);
 		view.getSettings().setJavaScriptEnabled(true);
@@ -61,38 +71,39 @@ public class HTMLPlayerActivity extends Activity {
 
 		final Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-//			int categoryId = 0;
-//			Object o = extras.get("categoryId");
-//			if (o != null) {
-//				categoryId = (Integer) o;
-//
-//			} else {
-//				categoryId = extras.getInt("serieId");
-//
-//			}
+			// int categoryId = 0;
+			// Object o = extras.get("categoryId");
+			// if (o != null) {
+			// categoryId = (Integer) o;
+			//
+			// } else {
+			// categoryId = extras.getInt("serieId");
+			//
+			// }
 
 			int productId = extras.getInt("productId");
 
-		//	categoriesForBar = (ArrayList<ProductsGroup>) extras
-		//			.get("headerBar");
+			// categoriesForBar = (ArrayList<ProductsGroup>) extras
+			// .get("headerBar");
 			// categoriesForBar.add(dataSource.getCategory(id));
 
-			ProductDataSource ds = new ProductDataSource(this);
+			ds = new ProductDataSource(this);
 			ds.open();
 			System.out.println("PRODUCTIDDDD ____ " + productId);
-			//Product product = ds.getProduct(productId);
+			// Product product = ds.getProduct(productId);
 			List<Product> products = ds.getProducts();
 			Product product = null;
-			for(Product p: products){
-				if(p.getId() == productId){
+			for (Product p : products) {
+				if (p.getId() == productId) {
 					product = p;
 				}
 			}
 			Utilities.addToHistoryPath(mContext, product);
 			Utilities.addHistoryToBar(this, headerBar);
 			loadProduct(productId);
-			Utilities.addToLog(getApplicationContext(), productId, LoggedActivity.PRODUCT);
-			
+			Utilities.addToLog(getApplicationContext(), productId,
+					LoggedActivity.PRODUCT);
+
 		}
 	}
 
@@ -103,14 +114,36 @@ public class HTMLPlayerActivity extends Activity {
 				+ "/" + productId + ".html");
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		ds.open();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		ds.close();
+	}
+
 	public void onSmartSalesClick(View v) {
 		Intent intent = new Intent(this, MainCategories.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
+
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		Utilities.performBack(this);
+	}
+
+	private void setAccountInfo() {
+		settings = getSharedPreferences("settings", 0);
+		if (settings.getBoolean("guest", true)) {
+			accountManage.setText("Влизане");
+		} else {
+			accountManage.setText("Излизане");
+		}
 	}
 }

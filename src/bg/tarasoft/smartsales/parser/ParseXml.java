@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.Model;
@@ -39,6 +40,7 @@ public class ParseXml {
 	private static final String STORE_CONTR = "retail_contr";
 	private static final String STORE_NUMBER = "store_number";
 	private static final String PRODUCT_PRICE = "price";
+	private static final String MODEL_ID = "model_id";
 
 	private static String ITEM = "item";
 
@@ -172,6 +174,8 @@ public class ParseXml {
 					product.setName(getElementByName(firstPersonElement, NAME));
 					product.setImageUrl(getElementByName(firstPersonElement,
 							PIC));
+					product.setModelId(Integer.valueOf(getElementByName(
+							firstPersonElement, MODEL_ID)));
 					// SETING LABEL
 					setProductStatus(product, firstPersonElement);
 					NodeList series = firstPersonElement
@@ -375,7 +379,34 @@ public class ParseXml {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		dataSource.close();
+	}
+
+	public static void parseUser(Document doc, Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(
+				"settings", 0);
+		SharedPreferences.Editor edit = preferences.edit();
+		try {
+			NodeList childNodes = doc.getChildNodes();
+			for (int i = 0; i < childNodes.getLength(); i++) {
+				Node firstPersonNode = childNodes.item(i);
+				if (firstPersonNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element firstPersonElement = (Element) firstPersonNode;
+					String admin = getElementByName(firstPersonElement,
+							"admin_rights");
+					if ("n".equals(admin)) {
+						edit.putBoolean("admin_rights", false);
+					} else {
+						edit.putBoolean("admin_rights", true);
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		edit.apply();
 	}
 }

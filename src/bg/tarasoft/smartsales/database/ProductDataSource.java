@@ -24,7 +24,8 @@ public class ProductDataSource {
 			MySQLiteOpenHelper.COLUMN_NAME,
 			MySQLiteOpenHelper.COLUMN_PARENT_CATEGORY_ID,
 			MySQLiteOpenHelper.COLUMN_PIC, MySQLiteOpenHelper.COLUMN_STATUS,
-			MySQLiteOpenHelper.COLUMN_PRODUCT_PRICE };
+			MySQLiteOpenHelper.COLUMN_PRODUCT_PRICE,
+			MySQLiteOpenHelper.COLUMN_MODEL_ID };
 
 	public ProductDataSource(Context context) {
 		dbHelper = new MySQLiteOpenHelper(context);
@@ -100,13 +101,10 @@ public class ProductDataSource {
 			values.put(MySQLiteOpenHelper.COLUMN_STATUS, product.getLabel());
 			values.put(MySQLiteOpenHelper.COLUMN_PRODUCT_PRICE,
 					product.getPrice());
+			values.put(MySQLiteOpenHelper.COLUMN_MODEL_ID, product.getModelId());
 			database.insert(MySQLiteOpenHelper.TABLE_PRODUCTS, null, values);
 
-			System.out.println("INSERTED");
-
 			total++;
-
-			System.out.println("PROD: " + total);
 
 			progress.setProgress((int) (total * zipLenghtOfFile)
 					/ zipLenghtOfFile);
@@ -124,6 +122,23 @@ public class ProductDataSource {
 		}
 	}
 
+	public List<Product> getProductsByModel(int modelId) {
+		List<Product> products = new ArrayList<Product>();
+
+		Cursor cursor = database.query(MySQLiteOpenHelper.TABLE_PRODUCTS,
+				allColumns, MySQLiteOpenHelper.COLUMN_MODEL_ID + "="
+						+ String.valueOf(modelId), null, null, null, null);
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Product product = cursorToProduct(cursor);
+			products.add(product);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return products;
+	}
+	
 	public List<Product> getProductsBySerie(int serieId) {
 		List<Product> products = new ArrayList<Product>();
 
@@ -207,6 +222,7 @@ public class ProductDataSource {
 		product.setImageUrl(cursor.getString(4));
 		product.setLabel(cursor.getInt(5));
 		product.setPrice(cursor.getInt(6));
+		product.setModelId(cursor.getInt(7));
 		return product;
 	}
 }

@@ -44,7 +44,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_STORE_RETAIL_ID = "retail_id";
 
 	private static final String DATABASE_NAME = "samsung_app.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	private static final String CREATE_TABLE_STORE_RETAILS = "create table "
 			+ TABLE_STORE_RETAILS + "(" + COLUMN_ID
@@ -88,7 +88,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 			+ " integer not null, " + COLUMN_NAME + " text not null, "
 			+ COLUMN_PARENT_CATEGORY_ID + " integer not null, " + COLUMN_PIC
 			+ " text not null, " + COLUMN_STATUS + " integer not null, "
-			+ COLUMN_PRODUCT_PRICE + " integer not null);";
+			+ COLUMN_PRODUCT_PRICE + " integer not null, " + COLUMN_MODEL_ID
+			+ " integer not null);";
 
 	private static final String CREATE_TABLE_MODELS = "create table "
 			+ TABLE_MODELS + "(" + COLUMN_ID

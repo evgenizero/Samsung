@@ -7,16 +7,20 @@ import java.util.List;
 
 import bg.tarasoft.smartsales.adapters.CategoryAdapter;
 import bg.tarasoft.smartsales.adapters.GridAdapter;
+import bg.tarasoft.smartsales.adapters.ModelsAdapter;
 import bg.tarasoft.smartsales.adapters.SeriesAdapter;
 import bg.tarasoft.smartsales.bean.Category;
 import bg.tarasoft.smartsales.bean.LoggedActivity;
 import bg.tarasoft.smartsales.bean.ProductsGroup;
 import bg.tarasoft.smartsales.database.CategoryDataSource;
+import bg.tarasoft.smartsales.database.ModelsDataSource;
 import bg.tarasoft.smartsales.database.ProductDataSource;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
 import bg.tarasoft.smartsales.listeners.OnAccountButtonClick;
 import bg.tarasoft.smartsales.listeners.OnCategoryListItemClickListener;
+import bg.tarasoft.smartsales.listeners.OnModelClickListener;
 import bg.tarasoft.smartsales.listeners.OnSerieClickListener;
+import bg.tarasoft.smartsales.listeners.OnSerieNewClickListener;
 import bg.tarasoft.smartsales.listeners.OnSettingsButtonClick;
 import bg.tarasoft.smartsales.listeners.OnSubCategoryClickListener;
 import bg.tarasoft.smartsales.requests.GetCategoriesRequest;
@@ -64,6 +68,7 @@ public class SubCategoriesActivity extends Activity {
 	private CategoryDataSource dataSource;
 	private SeriesDataSource seriesDataSource;
 	private ProductDataSource productsDataSource;
+	private ModelsDataSource modelsDataSource;
 	private Context mContext;
 	private HeaderBar headerBar;
 	private int id;
@@ -76,7 +81,7 @@ public class SubCategoriesActivity extends Activity {
 	private HorizontalScrollView scrollView;
 	private TextView accountManage;
 	private SharedPreferences settings;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,11 +103,14 @@ public class SubCategoriesActivity extends Activity {
 		productsDataSource = new ProductDataSource(this);
 		productsDataSource.open();
 
+		modelsDataSource = new ModelsDataSource(this);
+		modelsDataSource.open();
+
 		headerBar = (HeaderBar) findViewById(R.id.header_bar);
 		scrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView1);
 		accountManage = (TextView) findViewById(R.id.account_button);
 		accountManage.setOnClickListener(new OnAccountButtonClick(this));
-		
+
 		buttonsContainer = (LinearLayout) findViewById(R.id.buttons_container);
 		settingsButton = (Button) findViewById(R.id.settingsButton);
 		settingsButton.setOnTouchListener(new OnSettingsButtonClick(this));
@@ -118,7 +126,7 @@ public class SubCategoriesActivity extends Activity {
 		mContext = this;
 
 		setAccountInfo();
-		
+
 		final Bundle extras = getIntent().getExtras();
 
 		if (extras != null) {
@@ -144,8 +152,16 @@ public class SubCategoriesActivity extends Activity {
 				if (master != null) {
 					currentCategory = (Integer) master;
 				}
-				if (!extras.getBoolean("noSeries")) {
-					System.out.println();
+
+				if (extras.getBoolean("models")) {
+					gridView.setAdapter(new ModelsAdapter(this,
+							modelsDataSource.getModelsBySerie(id),
+							R.layout.grid_item));
+					gridView.setOnItemClickListener(new OnModelClickListener(
+							this, categoryName, (ArrayList<Category>) extras
+									.get("headerBar")));
+
+				} else if (!extras.getBoolean("noSeries")) {
 					logType = LoggedActivity.CATEGORY;
 					id = extras.getInt("categoryId");
 
@@ -153,7 +169,7 @@ public class SubCategoriesActivity extends Activity {
 					gridView.setAdapter(new SeriesAdapter(this,
 							seriesDataSource.getSeries(id), R.layout.grid_item));
 
-					gridView.setOnItemClickListener(new OnSerieClickListener(
+					gridView.setOnItemClickListener(new OnSerieNewClickListener(
 							this, categoryName, (ArrayList<Category>) extras
 									.get("headerBar")));
 
@@ -242,7 +258,7 @@ public class SubCategoriesActivity extends Activity {
 
 	private void setAccountInfo() {
 		settings = getSharedPreferences("settings", 0);
-		if(settings.getBoolean("guest", true)) {
+		if (settings.getBoolean("guest", true)) {
 			accountManage.setText("Влизане");
 		} else {
 			accountManage.setText("Излизане");
@@ -253,6 +269,9 @@ public class SubCategoriesActivity extends Activity {
 		new SendLocationLogRequest(this);
 		new GetChecksumRequest(this, "common_files");
 		new GetChecksumRequest(this, "xml_categories");
+//		new GetChecksumRequest(this, "xml_series");
+//		new GetChecksumRequest(this, "xml_models");
+//		new GetChecksumRequest(this, "xml_products");
 		SamsungRequests.getExecutor().execute();
 	}
 
@@ -309,6 +328,7 @@ public class SubCategoriesActivity extends Activity {
 		dataSource.close();
 		seriesDataSource.close();
 		productsDataSource.close();
+		modelsDataSource.close();
 	}
 
 	@Override
@@ -317,6 +337,7 @@ public class SubCategoriesActivity extends Activity {
 		dataSource.open();
 		seriesDataSource.open();
 		productsDataSource.open();
+		modelsDataSource.open();
 
 		reloadBottomButtons();
 	}

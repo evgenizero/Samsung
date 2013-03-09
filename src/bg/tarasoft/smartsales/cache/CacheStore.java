@@ -140,7 +140,7 @@ public class CacheStore {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inJustDecodeBounds = true;
 			BitmapFactory.decodeFile(fileUri.toString(), options);
-			options.inSampleSize = calculateInSampleSize(options, 93, 130);
+			options.inSampleSize = calculateInSampleSize(options, 200, 200);
 			options.inJustDecodeBounds = false;
 
 			Bitmap bm = BitmapFactory.decodeFile(fileUri.toString(), options);

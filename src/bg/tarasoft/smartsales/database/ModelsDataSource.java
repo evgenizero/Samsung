@@ -72,7 +72,7 @@ public class ModelsDataSource {
 
 		Cursor cursor = database
 				.rawQuery(
-						"select * from models where id in (select id from model_series where serie_id=?);",
+						"select * from models where model_id in (select id from model_series where serie_id=?);",
 						new String[] { String.valueOf(serieId) });
 
 		cursor.moveToFirst();

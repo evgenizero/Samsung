@@ -14,6 +14,7 @@ import bg.tarasoft.smartsales.database.CategoryDataSource;
 import bg.tarasoft.smartsales.database.LogsDataSource;
 import bg.tarasoft.smartsales.database.ProductDataSource;
 import bg.tarasoft.smartsales.database.SeriesDataSource;
+import bg.tarasoft.smartsales.listeners.OnAccountButtonClick;
 import bg.tarasoft.smartsales.requests.GetChecksumRequest;
 import bg.tarasoft.smartsales.requests.SamsungRequests;
 import bg.tarasoft.smartsales.samsung.R;
@@ -49,12 +50,14 @@ public class ProductsActivity extends Activity {
 	private List<Product> products;
 
 	private TextView updateText;
-
+	private TextView accountManage;
 	private int logType;
+
+	private SharedPreferences settings;
 	
 	private ProductAdapterNew adapter;
 	private View compareButton;
-	
+
 	public Integer checksNum = new Integer(0);
 
 	@Override
@@ -73,7 +76,11 @@ public class ProductsActivity extends Activity {
 		compareButton = findViewById(R.id.compare_button);
 		compareButton.setVisibility(View.GONE);
 		categoriesForBar = Utilities.getHistory(this);
+		accountManage = (TextView) findViewById(R.id.account_button);
+		accountManage.setOnClickListener(new OnAccountButtonClick(this));
 
+		setAccountInfo();
+		
 		SharedPreferences preferences = getSharedPreferences("settings", 0);
 		if (preferences.getInt("updateAll", 0) == 0) {
 			updateText.setVisibility(View.GONE);
@@ -83,11 +90,12 @@ public class ProductsActivity extends Activity {
 
 			public void onClick(View v) {
 				if (products.size() != 0) {
-					
+
 					Toast.makeText(mContext, "Updating all", Toast.LENGTH_SHORT)
 							.show();
 					new GetChecksumRequest(mContext, products);
 					SamsungRequests.getExecutor().execute();
+
 				}
 
 			}
@@ -101,7 +109,12 @@ public class ProductsActivity extends Activity {
 		if (extras != null) {
 			int categoryId = 0;
 			Object o = extras.get("categoryId");
-			if (o != null) {
+			Integer modelId = extras.getInt("modelId");
+			if (modelId != null) {
+				products = dataSource.getProductsByModel(modelId);
+				adapter = new ProductAdapterNew(this, products);
+				gridView.setAdapter(adapter);
+			} else if (o != null) {
 				categoryId = (Integer) o;
 				logType = LoggedActivity.CATEGORY;
 
@@ -162,11 +175,20 @@ public class ProductsActivity extends Activity {
 		// TODO Auto-generated method stub
 		Utilities.performBack(this);
 	}
-	
+
+	private void setAccountInfo() {
+		settings = getSharedPreferences("settings", 0);
+		if (settings.getBoolean("guest", true)) {
+			accountManage.setText("Влизане");
+		} else {
+			accountManage.setText("Излизане");
+		}
+	}
+
 	public List<Integer> getCompareIds() {
 		return adapter == null ? null : adapter.getSelectedIds();
 	}
-	
+
 	public void setCompareButtonVisibility(int visibility) {
 		compareButton.setVisibility(visibility);
 	}

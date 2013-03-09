@@ -26,8 +26,8 @@ public abstract class SamsungRequests extends AsyncTask<Void, Void, Void> {
 	
 	protected static RequestExecutor executor;
 	
-	private CategoryDataSource dataSource;
-	private static boolean isInitialData = false;
+	//private CategoryDataSource dataSource;
+	//private static boolean isInitialData = false;
 
 	public static RequestExecutor getExecutor() {
 		return executor;
@@ -37,15 +37,15 @@ public abstract class SamsungRequests extends AsyncTask<Void, Void, Void> {
 		this(context, showMessage);
 		this.baseUrl = baseUrl;
 		
-		dataSource = new CategoryDataSource(context);
-		dataSource.open();
-		
-		
-		if(dataSource.isEmpty() && !Utilities.isOnline(context)) {
-			isInitialData = true;
-		} 
-		
-		dataSource.close();
+//		dataSource = new CategoryDataSource(context);
+//		dataSource.open();
+//		
+//		
+//		if(dataSource.isEmpty() && !Utilities.isOnline(context)) {
+//			isInitialData = true;
+//		} 
+//		
+//		dataSource.close();
 	}
 	
 	protected SamsungRequests(Context context, String showMessage) {
@@ -57,24 +57,24 @@ public abstract class SamsungRequests extends AsyncTask<Void, Void, Void> {
 		}
 		executor.addRequest(this);
 		
-		dataSource = new CategoryDataSource(context);
-		dataSource.open();
-		
-		if(dataSource.isEmpty() && !Utilities.isOnline(context)) {
-			isInitialData = true;
-		} 
-		
-		dataSource.close();
+//		dataSource = new CategoryDataSource(context);
+//		dataSource.open();
+//		
+//		if(dataSource.isEmpty() && !Utilities.isOnline(context)) {
+//			isInitialData = true;
+//		} 
+//		
+//		dataSource.close();
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
 
-		if (!Utilities.isOnline(context) && !isInitialData) {
-			cancel(true);
-			isInitialData = false;
-		}
+//		if (!Utilities.isOnline(context) && !isInitialData) {
+//			cancel(true);
+//			isInitialData = false;
+//		}
 	}
 
 	protected void openConnection() throws Exception {

@@ -31,6 +31,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -46,7 +47,6 @@ public class GetChecksumRequest extends SamsungGetRequest {
 	private boolean toOpen;
 	private boolean areMultipleProducts = false;
 	private List<Product> products;
-	private Context mContext;
 	private boolean downloadingHTML = false;
 
 	public GetChecksumRequest(Context context, String checksumType) {
@@ -55,6 +55,8 @@ public class GetChecksumRequest extends SamsungGetRequest {
 						+ checksumType + "&answer_type=checksum");
 
 		this.dialogMessage = "Checking for updates";
+
+		System.out.println("WHY THE HELL: " + context);
 
 		dataSource = new ChecksumDataSource(context);
 		dataSource.open();
@@ -106,7 +108,6 @@ public class GetChecksumRequest extends SamsungGetRequest {
 
 		this.products = Utilities.cloneList(products);
 		this.products.remove(0);
-		this.mContext = context;
 		this.dialogMessage = "Checking for updates";
 		this.areMultipleProducts = true;
 		dataSource = new ChecksumDataSource(context);
@@ -143,12 +144,6 @@ public class GetChecksumRequest extends SamsungGetRequest {
 
 		if (!error) {
 			Checksum oldChecksum = dataSource.getChecksum(type);
-
-			System.out.println("NEW CHECKSUM = " + newChecksum);
-
-			if (oldChecksum != null) {
-				System.out.println("OLD CHECKSUM = " + oldChecksum.getValue());
-			}
 			if (!"No product.".equals(newChecksum)) {
 				if (oldChecksum != null
 						&& oldChecksum.getValue().equals(newChecksum)) {
@@ -159,7 +154,6 @@ public class GetChecksumRequest extends SamsungGetRequest {
 					// contains number
 					if (type.matches(".*\\d.*") && toOpen) {
 						// is a product
-
 						Utilities.openProduct(context, Integer.parseInt(type));
 
 					}
@@ -178,20 +172,21 @@ public class GetChecksumRequest extends SamsungGetRequest {
 			Log.d("TROLL", "DOWNLOADING HTML IS " + downloadingHTML);
 			if (!downloadingHTML && areMultipleProducts && products.size() > 0) {
 				Log.d("TROLL", "GET CHECKSUM REQ " + downloadingHTML);
-				new GetChecksumRequest(mContext, products);
+				new GetChecksumRequest(context, products);
 				SamsungRequests.getExecutor().execute();
 			}
 
-			dataSource.close();
 		}
+		dataSource.close();
 	}
 
 	private void getData() {
 		if (type.equals("common_files")) {
 			new GetCommonFiles(context)
 					.execute("http://system.smartsales.bg/product/android_request_info/?request_type=common_files&answer_type=download");
-
-		} else if (type.equals("xml_categories")) {
+		} else if (type.equals("xml_categories") || "xml_series".equals(type)
+				|| "xml_models".equals(type) || "xml_products".equals(type)) {
+			executor.clear();
 			new GetStoresRequest(context);
 			new GetCategoriesRequest(context);
 			new GetProductsRequest(context);

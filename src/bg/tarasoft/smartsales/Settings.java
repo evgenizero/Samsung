@@ -35,6 +35,11 @@ public class Settings extends Activity{
 		updateAll = (CheckBox) findViewById(R.id.checkBox);
 		
 		preferences = getSharedPreferences("settings", 0);
+
+		if(!preferences.getBoolean("admin_rights", false)) {
+			chooseStore.setVisibility(View.GONE);
+		} 
+		
 		editor = preferences.edit();
 		
 		if(preferences.getInt("updateAll", 0) == 1) {

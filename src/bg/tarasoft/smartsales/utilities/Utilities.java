@@ -256,10 +256,12 @@ public class Utilities {
 		if (history.size() != 1) {
 			// CLEARS HISTORY
 			for (ProductsGroup p : history) {
-				if (p.equals(pGroup)) {
-					break;
-				} else {
-					clickedPosition++;
+				if(p != null) {
+					if (p.equals(pGroup)) {
+						break;
+					} else {
+						clickedPosition++;
+					}
 				}
 			}
 			int size = history.size() - clickedPosition;

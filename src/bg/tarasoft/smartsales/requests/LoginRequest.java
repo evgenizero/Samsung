@@ -1,9 +1,13 @@
 package bg.tarasoft.smartsales.requests;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -16,10 +20,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 import bg.tarasoft.smartsales.LoginActivity;
 import bg.tarasoft.smartsales.bean.LocationLog;
 import bg.tarasoft.smartsales.bean.LoginData;
+import bg.tarasoft.smartsales.parser.ParseXml;
 import bg.tarasoft.smartsales.utilities.Utilities;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -84,16 +91,31 @@ public class LoginRequest extends AsyncTask<LoginData, Void, String> {
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 
-		// System.out.println(result);
+		System.out.println(result);
 
 		if (!"invalid_email".equals(result) && !"invalid_pass".equals(result)) {
+			readResponse(result);
 			((LoginActivity) context).processRequest();
-		} else if("invalid_email".equals(result)) {
-			Toast.makeText(context, "Невалиден email", Toast.LENGTH_SHORT).show();
-		} else if("invalid_pass".equals(result)) {
+		} else if ("invalid_email".equals(result)) {
+			Toast.makeText(context, "Невалиден email", Toast.LENGTH_SHORT)
+					.show();
+		} else if ("invalid_pass".equals(result)) {
 			Toast.makeText(context, "Грешна парола", Toast.LENGTH_SHORT).show();
 		}
 		cancelDialog();
+	}
+
+	private void readResponse(String result) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		try {
+			db = dbf.newDocumentBuilder();
+			Document doc = db.parse(new InputSource(new ByteArrayInputStream(
+					result.getBytes("utf-8"))));
+			ParseXml.parseUser(doc, context);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String sendLoginData(LoginData data) {

@@ -20,9 +20,12 @@ public class ChecksumDataSource {
 
 	private String[] allColumns = { MySQLiteOpenHelper.COLUMN_ID,
 			MySQLiteOpenHelper.COLUMN_TYPE, MySQLiteOpenHelper.COLUMN_CHECKSUM };
+	private Context context;
 
 	public ChecksumDataSource(Context context) {
+		
 		dbHelper = new MySQLiteOpenHelper(context);
+		this.context = context;
 	}
 
 	public void open() throws SQLException {
@@ -36,7 +39,6 @@ public class ChecksumDataSource {
 	
 	public void insertChecksum(Checksum checksum) {
 		if (getChecksum(checksum.getType()) != null) {
-			
 			deleteChecksum(checksum);
 		}
 		ContentValues values = null;
